@@ -1,0 +1,35 @@
+{
+	"credit": "Made with Blockbench",
+    "textures": {
+	 	"base-side": "gti:block/machine/base/reactor_rods/sides",
+	 	"base-top": "gti:block/machine/base/reactor_rods/top",
+	 	"overlay-top": "gti:block/machine/overlay/nuclear_reactor_core/rod_top",
+	 	"overlay-side": "gti:block/machine/overlay/nuclear_reactor_core/rod_sides"
+	}, 
+	"elements": [
+		{
+			"name": "north-east-rod",
+			"from": [10, 1, 2],
+			"to": [14, 17, 6],
+			"faces": {
+				"north": {"uv": [0, 0, 4, 16], "texture": "#base-side", "tintindex": 7},
+				"east": {"uv": [0, 0, 4, 16], "texture": "#base-side", "tintindex": 7},
+				"south": {"uv": [0, 0, 4, 16], "texture": "#base-side", "tintindex": 7},
+				"west": {"uv": [0, 0, 4, 16], "texture": "#base-side", "tintindex": 7},
+				"up": {"uv": [0, 0, 4, 4], "texture": "#base-top", "tintindex": 7}
+			}
+		},
+		{
+			"name": "north-east-rod-overlay",
+			"from": [10, 1, 2],
+			"to": [14, 17, 6],
+			"faces": {
+				"north": {"uv": [0, 0, 4, 16], "texture": "#overlay-side", "tintindex": 3},
+				"east": {"uv": [0, 0, 4, 16], "texture": "#overlay-side", "tintindex": 3},
+				"south": {"uv": [0, 0, 4, 16], "texture": "#overlay-side", "tintindex": 3},
+				"west": {"uv": [0, 0, 4, 16], "texture": "#overlay-side", "tintindex": 3},
+				"up": {"uv": [0, 0, 4, 4], "texture": "#overlay-top", "tintindex": 3}
+			}
+		}
+	]
+}

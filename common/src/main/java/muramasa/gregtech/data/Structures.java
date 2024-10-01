@@ -12,6 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
@@ -20,7 +22,10 @@ import java.util.function.Function;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static muramasa.antimatter.data.AntimatterMaterialTypes.BLOCK;
 import static muramasa.antimatter.data.AntimatterMaterialTypes.FRAME;
+import static muramasa.antimatter.machine.Tier.HV;
+import static muramasa.antimatter.machine.Tier.LUV;
 import static muramasa.antimatter.structure.AntimatterStructureUtility.ofHatch;
+import static muramasa.antimatter.structure.AntimatterStructureUtility.ofHatchMinTier;
 import static muramasa.gregtech.data.Machines.*;
 import static muramasa.gregtech.data.Materials.Lithium;
 import static muramasa.gregtech.data.Materials.Steel;
@@ -130,6 +135,12 @@ public class Structures {
                 .at('C', GregTechBlocks.CASING_SOLID_STEEL, HATCH_ITEM_I, HATCH_ITEM_O, HATCH_ENERGY, HATCH_MUFFLER)
                 .min(1, HATCH_ITEM_I, HATCH_ITEM_O, HATCH_ENERGY).exact(1, HATCH_MUFFLER).offset(1, 1, 0).build()
         );
+        LARGE_AUTOCLAVE.setStructure(BlockEntityLargeAutoclave.class, b -> b.part("main")
+                .of("CCC", "CCC", "CCC").of("CCC", "C-C", "CCC").of("C~C", "CcC", "CCC").build()
+                .at('C', GregTechBlocks.CASING_STAINLESS_STEEL, HATCH_FLUID_I, HATCH_ITEM_I, HATCH_ITEM_O, HATCH_ENERGY)
+                .atElement('c', ofCoil(BlockEntityLargeAutoclave::setCoilData, BlockEntityLargeAutoclave::getCoilData))
+                .offset(1, 2, 0).min(1, HATCH_ITEM_I, HATCH_FLUID_I, HATCH_ITEM_O, HATCH_ENERGY).build()
+        );
         LARGE_BOILER.setStructure(BlockEntityLargeBoiler.class, b -> b.part("main")
                 .of("BBB", "BBB", "BBB").of("BBB", "BPB", "BBB").of(1).of(1).of("F~F", "FFF", "FFF").build()
                 .atElement('F', StructureUtility.<BlockEntityLargeBoiler>ofChain(
@@ -142,6 +153,11 @@ public class Structures {
                         ofHatch(HATCH_FLUID_O)))
                 .atElement('P', lazy(t -> ofBlock(t.getPipeCasing())))
                 .max(1, HATCH_ITEM_I).minMax(1, 2, HATCH_FLUID_I).exact(1, HATCH_MUFFLER).offset(1, 4, 0).build());
+        LARGE_BATHING_VAT.setStructure(BlockEntityLargeBath.class, b -> b.part("main")
+                .of("WWWWW", "WWWWW", "WWWWW", "WWWWW", "WWWWW")
+                .of("WW~WW", "WWWWW", "WWWWW", "WWWWW", "WWWWW").build()
+                .at('W', GregTechBlocks.STAINLESS_STEEL_WALL, HATCH_ITEM_I, HATCH_ITEM_O, HATCH_FLUID_I, HATCH_FLUID_O)
+                .offset(2, 1, 0).min(1, HATCH_ITEM_I, HATCH_FLUID_I, HATCH_ITEM_O).build());
         LARGE_CENTRIFUGE.setStructure(BlockEntityLargeCentrifuge.class, b -> b.part("main")
                 .of("CCC", "CcC", "CCC").of("C~C", "CCC", "CCC").build()
                 .at('C', GregTechBlocks.CASING_TUNGSTENSTEEL, HATCH_ITEM_I, HATCH_ITEM_O, HATCH_FLUID_I, HATCH_FLUID_O, HATCH_ENERGY)
@@ -162,13 +178,25 @@ public class Structures {
                 .offset(2, 1, 0).min(1, HATCH_ENERGY).build()
         );
 
-        LARGE_MACERATOR.setStructure(BlockEntityLargeMacerator.class, b -> b.part("main")
+        LARGE_PULVERIZER.setStructure(BlockEntityLargeMacerator.class, b -> b.part("main")
                 .of("CCCCC", "CGGGC", "CGGGC", "CGGGC", "CCCCC").of(0).of("CC~CC", "CCCCC", "CCCCC", "CCCCC", "CCCCC").build()
-                .at('C', GregTechBlocks.CASING_TUNGSTENSTEEL, HATCH_ITEM_I, HATCH_ITEM_O, HATCH_ENERGY)
-                .at('G', GregTechBlocks.GRINDING_WHEELS)
+                .at('C', GregTechBlocks.TUNGSTENSTEEL_WALL, HATCH_ITEM_I, HATCH_ITEM_O, ofHatchMinTier(HATCH_ENERGY, HV))
+                .atElement('G', onElementPass((el, t, w, x, y, z) -> {
+                    BlockState state = w.getBlockState(new BlockPos(x, y, z));
+                    w.setBlock(new BlockPos(x, y, z), state.setValue(BlockStateProperties.HORIZONTAL_FACING, t.getFacing()), 3);
+                }, ofBlock(GregTechBlocks.GRINDING_WHEELS)))
                 .offset(2, 2, 0).min(1, HATCH_ENERGY, HATCH_ITEM_I, HATCH_ITEM_O).build()
         );
-
+        LARGE_ORE_WASHER.setStructure(BlockEntityLargeOreWasher.class, b -> b.part("main")
+                .of("OOO", "OOO", "OOO", "OOO", "OOO", "OOO", "OOO")
+                .of("CCC", "CCC", "CCC", "CCC", "CCC", "CCC", "CCC")
+                .of("C~C", "CCC", "CCC", "CCC", "CCC", "CCC", "CCC").build()
+                .atElement('O', onElementPass((el, t, w, x, y, z) -> {
+                    BlockState state = w.getBlockState(new BlockPos(x, y, z));
+                    w.setBlock(new BlockPos(x, y, z), state.setValue(BlockStateProperties.HORIZONTAL_FACING, t.getFacing()), 3);
+                }, ofBlock(GregTechBlocks.ORE_WASHING_PARTS)))
+                .at('C', GregTechBlocks.TITANIUM_WALL, HATCH_ITEM_I, HATCH_FLUID_I, HATCH_ITEM_O, HATCH_ENERGY)
+                .offset(1, 2, 0).min(1, HATCH_ENERGY, HATCH_FLUID_I, HATCH_ITEM_I, HATCH_ITEM_O).build());
         LARGE_TURBINE.setStructure(BlockEntityLargeTurbine.class, b -> b.part("main")
                 .of("CCC", "CCC", "CCC", "CCC").of("C~C", "H-H", "H-H", "CEC").of(0).build()
                 .atElement('C', StructureUtility.lazy(t -> ofBlock(t.getCasing())))
@@ -268,7 +296,7 @@ public class Structures {
                         ofBlock(GregTechBlocks.CASING_FUSION),
                         ofHatch(HATCH_FLUID_O),
                         ofHatch(HATCH_ITEM_O)))
-                .atElement('E', StructureUtility.<BlockEntityFusionReactor>ofChain(ofBlock(GregTechBlocks.CASING_FUSION), ofHatch(HATCH_ENERGY)))
+                .atElement('E', StructureUtility.<BlockEntityFusionReactor>ofChain(ofBlock(GregTechBlocks.CASING_FUSION), ofHatchMinTier(HATCH_ENERGY, LUV)))
             .offset(7, 1, 12).min(1, HATCH_FLUID_I).min(1, HATCH_FLUID_O).min(4, HATCH_ENERGY).build());
     }
 

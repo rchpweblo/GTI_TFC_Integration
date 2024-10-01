@@ -139,6 +139,13 @@ public class RemappingEvents {
                     return;
                 }
             }
+            if (id.contains("palladium")){
+                Block block = AntimatterAPI.get(Block.class, id.replace("palladium", "sperrylite").replace("granite_black", "black_granite").replace("granite_red", "red_granite"), Ref.SHARED_ID);
+                if (block != null){
+                    map.remap(block);
+                    return;
+                }
+            }
             if (id.contains("aluminium")){
                 Block block = AntimatterAPI.get(Block.class, id.replace("aluminium", "alumina").replace("granite_black", "black_granite").replace("granite_red", "red_granite"), Ref.SHARED_ID);
                 if (block != null){
@@ -275,6 +282,13 @@ public class RemappingEvents {
                     return;
                 }
             }
+            if (id.contains("palladium")){
+                Item block = AntimatterAPI.get(Item.class, id.replace("palladium", "sperrylite").replace("granite_black", "black_granite").replace("granite_red", "red_granite"), Ref.SHARED_ID);
+                if (block != null){
+                    map.remap(block);
+                    return;
+                }
+            }
             if (id.contains("aluminium")){
                 Item block = AntimatterAPI.get(Item.class, id.replace("aluminium", "alumina").replace("granite_black", "black_granite").replace("granite_red", "red_granite"), Ref.SHARED_ID);
                 if (block != null){
@@ -339,6 +353,9 @@ public class RemappingEvents {
             }
             if (id.contains("nitric_oxide")){
                 liquid = liquid.replace("nitric_oxide", "nitrogen_monoxide");
+            }
+            if (id.contains("sodium_persulfate")){
+                liquid = liquid.replace("sodium_persulfate", "sodium_persulfate_solution");
             }
             AntimatterFluid fluid = AntimatterAPI.get(AntimatterFluid.class, liquid);
             if (fluid != null){

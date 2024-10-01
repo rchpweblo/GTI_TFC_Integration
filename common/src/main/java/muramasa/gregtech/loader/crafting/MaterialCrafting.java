@@ -2,19 +2,14 @@ package muramasa.gregtech.loader.crafting;
 
 import com.google.common.collect.ImmutableMap;
 import muramasa.antimatter.AntimatterAPI;
-import muramasa.antimatter.AntimatterConfig;
-import muramasa.antimatter.Ref;
-import muramasa.antimatter.data.AntimatterDefaultTools;
 import muramasa.antimatter.data.AntimatterMaterialTypes;
-import muramasa.antimatter.data.AntimatterMaterials;
+import muramasa.antimatter.data.ForgeCTags;
 import muramasa.antimatter.datagen.providers.AntimatterRecipeProvider;
-import muramasa.antimatter.material.Material;
 import muramasa.antimatter.material.MaterialTypeItem;
 import muramasa.antimatter.pipe.PipeSize;
 import muramasa.antimatter.pipe.types.ItemPipe;
 import muramasa.gregtech.GTIRef;
-import muramasa.gregtech.data.ToolTypes;
-import net.minecraft.advancements.CriterionTriggerInstance;
+import muramasa.gregtech.data.GregTechMaterialTypes;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -26,9 +21,9 @@ import java.util.function.Consumer;
 import static com.google.common.collect.ImmutableMap.of;
 import static muramasa.antimatter.data.AntimatterDefaultTools.*;
 import static muramasa.antimatter.data.AntimatterMaterialTypes.*;
-import static muramasa.antimatter.data.AntimatterMaterials.Copper;
-import static muramasa.antimatter.data.AntimatterMaterials.Gold;
+import static muramasa.antimatter.data.AntimatterMaterials.*;
 import static muramasa.antimatter.material.MaterialTags.*;
+import static muramasa.gregtech.data.GregTechMaterialTypes.CHAMBER;
 import static muramasa.gregtech.data.Materials.*;
 
 public class MaterialCrafting {
@@ -57,13 +52,19 @@ public class MaterialCrafting {
             /*provider.addStackRecipe(consumer, GTIRef.ID, m.getId() + "_tiny_dust", "antimatter_materials", "has_wrench", in, DUST_TINY.get(m, 9),
                     of('D', DUST.getMaterialTag(m)), "D ");*/
         });
-        ToolTypes.TURBINE_BLADE.all().forEach(m -> {
+        GregTechMaterialTypes.TURBINE_BLADE.all().forEach(m -> {
             provider.addStackRecipe(consumer, GTIRef.ID, "", "antimatter_materials",
-                    ToolTypes.TURBINE_BLADE.get(m, 1), ImmutableMap.<Character, Object>builder()
+                    GregTechMaterialTypes.TURBINE_BLADE.get(m, 1), ImmutableMap.<Character, Object>builder()
                             .put('S', SCREWDRIVER.getTag())
                             .put('F', FILE.getTag())
                             .put('P', PLATE.getMaterialTag(m))
                             .put('s', SCREW.getMaterialTag(m)).build(), "FPS", "sPs", " P ");
+        });
+        CHAMBER.all().forEach(m -> {
+            if (!m.has(GEM) && !m.has(PLATE)) return;
+            TagKey<Item> input = m == Quartz ? ForgeCTags.GEMS_QUARTZ_ALL : m.has(GEM) ? GEM.getMaterialTag(m) :  PLATE.getMaterialTag(m);
+            provider.addItemRecipe(consumer, "chambers", CHAMBER.get(m),
+                    of('I', input, 'H', HAMMER.getTag() ,'W', WRENCH.getTag()), "IHI", "IWI", "III");
         });
         AntimatterAPI.all(ItemPipe.class, i -> {
             if (i.getSizes().contains(PipeSize.NORMAL)){

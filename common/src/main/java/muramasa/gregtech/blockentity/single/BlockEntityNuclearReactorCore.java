@@ -4,6 +4,7 @@ import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import io.github.gregtechintergalactical.gtcore.blockentity.IInventorySyncTile;
 import io.github.gregtechintergalactical.gtcore.network.MessageInventorySync;
 import io.github.gregtechintergalactical.gtcore.network.MessageTriggerInventorySync;
+import muramasa.antimatter.Ref;
 import muramasa.antimatter.blockentity.BlockEntityMachine;
 import muramasa.antimatter.blockentity.IPostTickTile;
 import muramasa.antimatter.capability.IFilterableHandler;
@@ -22,6 +23,7 @@ import muramasa.antimatter.machine.types.Machine;
 import muramasa.antimatter.material.Material;
 import muramasa.antimatter.network.AntimatterNetwork;
 import muramasa.antimatter.pipe.TileTicker;
+import muramasa.antimatter.texture.Texture;
 import muramasa.antimatter.tool.AntimatterToolType;
 import muramasa.antimatter.util.CodeUtils;
 import muramasa.antimatter.util.Utils;
@@ -52,6 +54,9 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tesseract.TesseractGraphWrappers;
+import tesseract.api.item.ExtendedItemContainer;
+
+import java.util.function.Function;
 
 import static muramasa.antimatter.Ref.B;
 import static muramasa.gregtech.data.Materials.*;
@@ -122,14 +127,7 @@ public class BlockEntityNuclearReactorCore extends BlockEntitySecondaryOutput<Bl
 
     public void syncSlots(){
         if (getLevel() != null && isServerSide()){
-            itemHandler.ifPresent(i -> {
-                i.getAll().keySet().forEach(s -> {
-                    var handler = i.getHandler(s);
-                    for (int i1 = 0; i1 < handler.getSlots(); i1++) {
-                        AntimatterNetwork.NETWORK.sendToAllLoaded(new MessageInventorySync(this.getBlockPos(), s, i1, i.getHandler(s).getItem(i1)), this.getLevel(), this.getBlockPos());
-                    }
-                });
-            });
+            sidedSync(true);
         }
     }
 
@@ -233,6 +231,8 @@ public class BlockEntityNuclearReactorCore extends BlockEntitySecondaryOutput<Bl
                     }
                     setRod(tSlot, ItemStack.EMPTY);
                     Utils.damageStack(held, player);
+                    level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 10.f, 1.0f);
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
@@ -252,6 +252,13 @@ public class BlockEntityNuclearReactorCore extends BlockEntitySecondaryOutput<Bl
     @Override
     public void onUnregisterPost() {
 
+    }
+
+    @Override
+    public Function<Direction, Texture> getMultiTexture() {
+        return direction -> {
+            return type.getBaseTexture(this.tier, UP, this.machineState);
+        };
     }
 
     @Override
@@ -305,6 +312,7 @@ public class BlockEntityNuclearReactorCore extends BlockEntitySecondaryOutput<Bl
                 }
             }
         } else {
+            if (machineState == MachineState.DISABLED) return;
             if (level.getGameTime() % 20 == 19) {
                 updateReactorRodModeration(0);
                 updateReactorRodModeration(1);
@@ -381,13 +389,16 @@ public class BlockEntityNuclearReactorCore extends BlockEntitySecondaryOutput<Bl
                     isExploding = true;
                 } else {
                     tEnergy = handler.getHeat() / heatPerCoolant;
+                    int multiplier = hotCoolant == Steam ? 160 : 1;
                     int toFill = hotCoolant == Steam ? tEnergy * 160 : tEnergy;
-                    FluidHolder fluidHolder = hotCoolant.has(AntimatterMaterialTypes.GAS) ? hotCoolant.getGas(toFill) : hotCoolant.getLiquid(toFill);
-                    if (coldCoolant.getFluidAmount() >= tEnergy * TesseractGraphWrappers.dropletMultiplier && fluidHandler1.fillOutput(fluidHolder.copyHolder(), true) == toFill * TesseractGraphWrappers.dropletMultiplier){
-                        fluidHandler1.fillOutput(fluidHolder, false);
-                        handler.extractInternal(tEnergy * heatPerCoolant, false);
-                        fluidHandler1.drainInput(tEnergy * TesseractGraphWrappers.dropletMultiplier, false);
-                    } else isExploding = true;
+                    if (tEnergy > 0){
+                        FluidHolder fluidHolder = hotCoolant.has(AntimatterMaterialTypes.GAS) ? hotCoolant.getGas(tEnergy * multiplier) : hotCoolant.getLiquid(tEnergy);
+                        if (coldCoolant.getFluidAmount() >= tEnergy * TesseractGraphWrappers.dropletMultiplier && fluidHandler1.fillOutput(fluidHolder.copyHolder(), true) == tEnergy * multiplier * TesseractGraphWrappers.dropletMultiplier){
+                            fluidHandler1.fillOutput(fluidHolder, false);
+                            handler.extractInternal(tEnergy * heatPerCoolant, false);
+                            fluidHandler1.drainInput(tEnergy * TesseractGraphWrappers.dropletMultiplier, false);
+                        }
+                    }
                 }
                 if (isExploding && !itemHandler.get().getHandler(SlotType.STORAGE).isEmpty()){
                     level.playSound(null, pos, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0f, 1.0f);
@@ -410,11 +421,6 @@ public class BlockEntityNuclearReactorCore extends BlockEntitySecondaryOutput<Bl
     @Override
     public void onMachineEvent(IMachineEvent event, Object... data) {
         if (event == SlotType.STORAGE){
-            if (data.length > 0 && data[0] instanceof Integer integer){
-                if (isServerSide() && getLevel() != null){
-                    AntimatterNetwork.NETWORK.sendToAllLoaded(new MessageInventorySync(this.getBlockPos(), SlotType.STORAGE, integer, getRod(integer)), this.getLevel(), this.getBlockPos());
-                }
-            }
             sidedSync(true);
         }
         super.onMachineEvent(event, data);
@@ -433,6 +439,35 @@ public class BlockEntityNuclearReactorCore extends BlockEntitySecondaryOutput<Bl
         }
         tag.put("currentNeutronCounts", currentNeutronCountTag);
         tag.put("oldNeutronCounts", oldNeutronCountTag);
+    }
+
+    @Override
+    public @NotNull CompoundTag getUpdateTag() {
+        CompoundTag nbt = super.getUpdateTag();
+        itemHandler.ifPresent(e -> {
+            CompoundTag in = new CompoundTag();
+            e.getAll().forEach((f,i) -> {
+                in.put(f.getId(), serializeWithEmpty(i, new CompoundTag()));
+            });
+            nbt.put(Ref.KEY_MACHINE_ITEMS, in);
+        });
+        return nbt;
+    }
+
+    public CompoundTag serializeWithEmpty(ExtendedItemContainer container, CompoundTag nbt) {
+        ListTag nbtTagList = new ListTag();
+
+
+        for(int i = 0; i < container.getSlots(); ++i) {
+            CompoundTag itemTag = new CompoundTag();
+            itemTag.putInt("Slot", i);
+            container.getItem(i).save(itemTag);
+            itemTag.putInt("count", container.getItem(i).getCount());
+            nbtTagList.add(itemTag);
+        }
+
+        nbt.put("Items", nbtTagList);
+        return nbt;
     }
 
     @Override

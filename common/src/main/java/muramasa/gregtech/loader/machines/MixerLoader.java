@@ -12,6 +12,8 @@ import muramasa.gregtech.block.BlockAsphalt;
 import muramasa.gregtech.data.GregTechBlocks;
 import muramasa.gregtech.data.GregTechItems;
 import muramasa.gregtech.data.GregTechTags;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 
 import static io.github.gregtechintergalactical.gtcore.data.GTCoreTags.DUST_LAPIS_LAZURITE;
 import static muramasa.antimatter.Ref.L;
+import static muramasa.antimatter.Ref.L9;
 import static muramasa.antimatter.data.AntimatterMaterialTypes.*;
 import static muramasa.antimatter.data.AntimatterMaterials.*;
 import static muramasa.antimatter.recipe.ingredient.RecipeIngredient.*;
@@ -88,6 +91,12 @@ public class MixerLoader {
         addAsphaltRecipe(Slate, GregTechBlocks.GRAY_ASPHALT);
         addAsphaltRecipe(Talc, GregTechBlocks.GRAY_ASPHALT);
         addAsphaltRecipe(GreenSchist, GregTechBlocks.GREEN_ASPHALT);
+        for (DyeColor dye : DyeColor.values()) {
+            String dyeName = dye.getName() + "_dye";
+            Material dyeMaterial = Material.get("water_mixed_" + dyeName);
+            MIXER.RB().ii(of(dye.getTag())).fi(Water.getLiquid(L)).fo(dyeMaterial.getLiquid(L + (L / 2))).add("water_mixed_" + dyeName, 16, 4);
+            MIXER.RB().ii(of(dye.getTag())).fi(DistilledWater.getLiquid(L)).fo(dyeMaterial.getLiquid(L + (L / 2))).add("water_mixed_" + dyeName + "_distilled_water", 16, 4);
+        }
     }
 
     private static void addAsphaltRecipe(Material dust, BlockAsphalt asphalt){
@@ -147,7 +156,9 @@ public class MixerLoader {
         MIXER.RB().ii(of(DUST.get(AntimatterMaterials.Stone,1))).fi(Lubricant.getLiquid(20), AntimatterMaterials.Water.getLiquid(4980)).fo(DrillingFluid.getLiquid(5000)).add("drilling_fluid",32*2, 16);
         MIXER.RB().ii(of(DUST.get(AntimatterMaterials.Stone,3)),of(DUST.get(Clay,1))).fi(AntimatterMaterials.Water.getLiquid(500)).fo(Concrete.getLiquid(576)).add("concrete", 20, 16);
         MIXER.RB().ii(RecipeIngredient.of(GTCoreItems.Biochaff)).fi(AntimatterMaterials.Water.getLiquid(1000)).fo(Biomass.getLiquid(1000)).add("biomass", 400, 8);
-        MIXER.RB().ii(DUST.getMaterialIngredient(Lapis, 1)).fi(DistilledWater.getLiquid(125)).fo(Coolant.getLiquid(125)).add("cold_coolant", 256, 48);
+        MIXER.RB().ii(of(DUST_LAPIS_LAZURITE, 1)).fi(DistilledWater.getLiquid(1000)).fo(Coolant.getLiquid(1000)).add("cold_coolant", 256, 48);
+        MIXER.RB().ii(DUST.getMaterialIngredient(SodiumPersulfate, 1)).fi(Water.getLiquid(1000)).fo(SodiumPersulfateSolution.getLiquid(1000)).add("sodium_persulfate_solution", 20, 16);
+        MIXER.RB().ii(DUST.getMaterialIngredient(SodiumPersulfate, 1)).fi(DistilledWater.getLiquid(1000)).fo(SodiumPersulfateSolution.getLiquid(1000)).add("sodium_persulfate_solution_distilled", 20, 16);
         long oneThird = AntimatterPlatformUtils.isFabric() ? 27000 : 333;
         MIXER.RB().ii(DUST.getMaterialIngredient(Wood, 4), DUST.getMaterialIngredient(Sulfur, 1), DUST.getMaterialIngredient(Lithium, 1)).fi(Glue.getLiquid(oneThird)).io(new ItemStack(GregTechItems.SuperFuelBinder, 8)).add("super_fuel_binder", 40 * 20, 16);
         MIXER.RB().ii(DUST.getMaterialIngredient(Wood, 4), DUST.getMaterialIngredient(Sulfur, 1), DUST.getMaterialIngredient(Sodium, 1)).fi(Glue.getLiquid(oneThird)).io(new ItemStack(GregTechItems.SuperFuelBinder, 8)).add("super_fuel_binder_1", 40 * 20, 16);

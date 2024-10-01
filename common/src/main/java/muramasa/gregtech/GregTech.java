@@ -19,6 +19,7 @@ import muramasa.antimatter.registration.Side;
 import muramasa.antimatter.tool.IAntimatterTool;
 import muramasa.antimatter.util.AntimatterPlatformUtils;
 import muramasa.gregtech.block.BlockAsphalt;
+import muramasa.gregtech.client.GregTechModelManager;
 import muramasa.gregtech.data.Machines;
 import muramasa.gregtech.data.*;
 import muramasa.gregtech.datagen.*;
@@ -33,7 +34,6 @@ import muramasa.gregtech.loader.machines.generator.Fuels;
 import muramasa.gregtech.loader.machines.generator.LargeBoilerLoader;
 import muramasa.gregtech.loader.multi.*;
 import muramasa.gregtech.proxy.CommonHandler;
-import muramasa.gregtech.proxy.ServerHandler;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -43,6 +43,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.function.BiConsumer;
+
+import static muramasa.antimatter.data.AntimatterMaterialTypes.PLATE;
 
 public class GregTech extends AntimatterMod {
 
@@ -60,7 +62,6 @@ public class GregTech extends AntimatterMod {
         new SpaceModRegistrar();
         LOGGER.info("Loading GregTech");
         INSTANCE = this;
-        ServerHandler.setup();
 
 
         AntimatterDynamics.clientProvider(GTIRef.ID,
@@ -79,7 +80,7 @@ public class GregTech extends AntimatterMod {
         });
         ev.addProvider(GTIRef.ID, () -> new GregTechItemTagProvider(GTIRef.ID, GTIRef.NAME.concat(" Item Tags"),
                 false, p[0]));
-        ev.addProvider(GTIRef.ID, () -> new AntimatterFluidTagProvider(GTIRef.ID,
+        ev.addProvider(GTIRef.ID, () -> new GregTechFluidTagProvider(GTIRef.ID,
                 GTIRef.NAME.concat(" Fluid Tags"), false));
         ev.addProvider(GTIRef.ID, () -> new AntimatterAdvancementProvider(GTIRef.ID,
                 GTIRef.NAME.concat(" Advancements"), new ProgressionAdvancements()));
@@ -119,6 +120,7 @@ public class GregTech extends AntimatterMod {
         loader.accept("circuitry", Circuitry::init);
         loader.accept("solid_fuel_boiler", SolidFuelBoilerLoader::init);
         loader.accept("compressor", CompressorLoader::init);
+        loader.accept("crystallization_chamber", CrystallizationChamberLoader::init);
         loader.accept("cutter", CutterLoader::init);
         loader.accept("dehydrator", DehydratorLoader::init);
         loader.accept("distillery", DistilleryLoader::init);
@@ -145,6 +147,7 @@ public class GregTech extends AntimatterMod {
         loader.accept("polarizer", PolarizerLoader::init);
         loader.accept("printer", PrinterLoader::init);
         loader.accept("roaster", RoasterLoader::init);
+        loader.accept("rock_breaker", RockBreakerLoader::init);
         loader.accept("scanner", ScannerLoader::init);
         loader.accept("sifter", SifterLoader::init);
         loader.accept("smelter", SmelterLoader::init);
@@ -177,6 +180,7 @@ public class GregTech extends AntimatterMod {
     public void onRegistrationEvent(RegistrationEvent event, Side side) {
         switch (event) {
             case DATA_INIT -> {
+                GregTechMaterialTypes.init();
                 ToolTypes.init();
                 Materials.init();
                 TierMaps.init();
@@ -223,7 +227,7 @@ public class GregTech extends AntimatterMod {
                     l.addAll(Arrays.asList(screwdriver_mv.getItem(), screwdriver_hv.getItem()));
                     l.add(GTCoreItems.BatteryRE);
                     if (!GregTechConfig.HARDER_CIRCUITS){
-                        l.addAll(Arrays.asList(GTCoreItems.CircuitBoardPhenolic));
+                        l.addAll(Arrays.asList(GTCoreItems.CircuitBoardPhenolic, PLATE.get(Materials.FiberReinforcedEpoxyResin)));
                         l.addAll(Arrays.asList(GregTechItems.CircuitWetware, GregTechItems.MicroProcessor, GregTechItems.IntegratedProcessor, GregTechItems.NanoProcessor, GregTechItems.QuantumProcessor));
                     }
                 });
@@ -238,7 +242,10 @@ public class GregTech extends AntimatterMod {
               //  if (side == Dist.CLIENT) StructureInfo.init();
                 TierMaps.providerInit();
             }
-            case CLIENT_DATA_INIT -> ClientData.init();
+            case CLIENT_DATA_INIT -> {
+                ClientData.init();
+                GregTechModelManager.init();
+            }
         }
     }
 

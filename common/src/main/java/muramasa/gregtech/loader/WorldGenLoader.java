@@ -202,6 +202,7 @@ public class WorldGenLoader {
             ).buildVein());
             ev.stoneLayer(new WorldGenStoneLayerBuilder("black_granite_ores").withStone(BLACK_GRANITE).withWeight(1).addOres(
                     new StoneLayerOre(Sheldonite, U32, -64, -48),
+                    new StoneLayerOre(Sperrylite, U32, -64, -48),
                     new StoneLayerOre(Iridium, U64, -64, -56),
                     new StoneLayerOre(Emerald, U64, -40, -16)
             ).buildVein());
@@ -354,7 +355,7 @@ public class WorldGenLoader {
                     BE_MARS, AA_MARS, BE_MOON, AA_MOON).buildVein());
             ev.vein(new WorldGenVeinLayerBuilder("nickel").asOreVein(11, 56, 40, 3, 16, Garnierite, Nickel, Cobaltite, Pentlandite,
                     NETHER, END, BE_MARS, AA_MARS, BE_MOON, AA_MOON).buildVein());
-            ev.vein(new WorldGenVeinLayerBuilder("platinum").asOreVein(-24, -9, 5, 3, 16, Sheldonite, Palladium, Platinum, Iridium,
+            ev.vein(new WorldGenVeinLayerBuilder("platinum").asOreVein(-24, -9, 5, 3, 16, Sheldonite, Sperrylite, Platinum, Iridium,
                     BE_MARS, AA_MARS).buildVein());
             /*ev.vein(new WorldGenVeinLayerBuilder("uranium").asOreVein(-44, -29, 20, 3, 16, Uraninite, Uraninite, Uraninite, Uraninite,
                 OVERWORLD, TWILIGHT_FOREST, BE_MARS, AA_MARS, BE_MOON, AA_MOON).buildVein());*/
@@ -396,7 +397,7 @@ public class WorldGenLoader {
                     OVERWORLD, BE_MARS, AA_MARS, BE_MOON, AA_MOON).buildVein());
             ev.vein(new WorldGenVeinLayerBuilder("nickel").asOreVein(11, 56, 40, 3, 16, Garnierite, Nickel, Cobaltite, Pentlandite,
                     OVERWORLD, NETHER, END, BE_MARS, AA_MARS, BE_MOON, AA_MOON).buildVein());
-            ev.vein(new WorldGenVeinLayerBuilder("platinum").asOreVein(-24, -9, 5, 3, 16, Sheldonite, Palladium, Platinum, Iridium,
+            ev.vein(new WorldGenVeinLayerBuilder("platinum").asOreVein(-24, -9, 5, 3, 16, Sheldonite, Sperrylite, Platinum, Iridium,
                     OVERWORLD, BE_MARS, AA_MARS).buildVein());
             /*ev.vein(new WorldGenVeinLayerBuilder("uranium").asOreVein(-44, -29, 20, 3, 16, Uraninite, Uraninite, Uraninite, Uraninite,
                 OVERWORLD, TWILIGHT_FOREST, BE_MARS, AA_MARS, BE_MOON, AA_MOON).buildVein());*/
@@ -434,7 +435,7 @@ public class WorldGenLoader {
                 NETHER, BE_MARS, AA_MARS).buildVein());
         ev.vein(new WorldGenVeinLayerBuilder("redstone_nether").asOreVein(10, 40, 60, 3, 24, Redstone, Redstone, Ruby, Cinnabar,
                 NETHER).buildVein());
-        ev.vein(new WorldGenVeinLayerBuilder("platinum_end").asOreVein(40, 50, 5, 3, 16, Sheldonite, Palladium, Platinum, Iridium,
+        ev.vein(new WorldGenVeinLayerBuilder("platinum_end").asOreVein(40, 50, 5, 3, 16, Sheldonite, Sperrylite, Platinum, Iridium,
                 END).buildVein());
         ev.vein(new WorldGenVeinLayerBuilder("molybdenum_end").asOreVein(20, 50, 5, 3, 16, Wulfenite, Molybdenite, Molybdenum,
                 Powellite , END).buildVein());

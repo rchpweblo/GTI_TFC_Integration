@@ -24,7 +24,7 @@ public class BlockCoil extends BlockBasic {
     }
 
     public BlockCoil(String domain, String id, CoilData coilData) {
-        this(domain, id, coilData, Block.Properties.of(Material.METAL).strength(1.0f, 10.0f).sound(SoundType.METAL).isValidSpawn((blockState, blockGetter, blockPos, object) -> false));
+        this(domain, id, coilData, Block.Properties.of(Material.METAL).strength(1.0f, 10.0f).sound(SoundType.METAL).isValidSpawn((blockState, blockGetter, blockPos, object) -> false).requiresCorrectToolForDrops());
     }
 
     public CoilData getCoilData() {
@@ -42,7 +42,8 @@ public class BlockCoil extends BlockBasic {
         tooltip.add(Utils.translatable("antimatter.tooltip.heat_capacity").append(": ").append(String.valueOf(this.coilData.heat)));
         tooltip.add(Utils.translatable("tooltip.gti.coil.percentage", (int)(this.coilData.percentage * 100) + "%"));
         tooltip.add(Utils.translatable("tooltip.gti.coil.maxSimultaneousRecipes", this.coilData.maxSimultaneousRecipes));
+        tooltip.add(Utils.translatable("tooltip.gti.coil.autoclaveBoosts", ((this.coilData.autoclaveBoosts * 10) + 100) + "%"));
     }
 
-    public record CoilData(int heat, float percentage, int maxSimultaneousRecipes){}
+    public record CoilData(int heat, float percentage, int maxSimultaneousRecipes, int autoclaveBoosts){}
 }

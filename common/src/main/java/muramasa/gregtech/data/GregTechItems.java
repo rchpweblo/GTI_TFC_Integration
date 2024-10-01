@@ -7,6 +7,7 @@ import muramasa.antimatter.machine.Tier;
 import muramasa.gregtech.GTIRef;
 import muramasa.gregtech.GregTech;
 import muramasa.gregtech.items.*;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 
 import static muramasa.gregtech.data.Materials.*;
@@ -47,6 +48,23 @@ public class GregTechItems {
     public static ItemBasic<?> SensorHV = new ItemBasic<>(GTIRef.ID, "sensor_hv");
     public static ItemBasic<?> SensorEV = new ItemBasic<>(GTIRef.ID, "sensor_ev");
     public static ItemBasic<?> SensorIV = new ItemBasic<>(GTIRef.ID, "sensor_iv");
+    public static ItemBasic<?> EmptySprayCan = new ItemBasic<>(GTIRef.ID, "empty_spray_can", "spray_cans/").tip("Used for making Sprays");
+    public static ItemBasic<?> WhiteSprayCan = new ItemSprayCan(DyeColor.WHITE);
+    public static ItemBasic<?> OrangeSprayCan = new ItemSprayCan(DyeColor.ORANGE);
+    public static ItemBasic<?> MagentaSprayCan = new ItemSprayCan(DyeColor.MAGENTA);
+    public static ItemBasic<?> LightBlueSprayCan = new ItemSprayCan(DyeColor.LIGHT_BLUE);
+    public static ItemBasic<?> YellowSprayCan = new ItemSprayCan(DyeColor.YELLOW);
+    public static ItemBasic<?> LimeSprayCan = new ItemSprayCan(DyeColor.LIME);
+    public static ItemBasic<?> PinkSprayCan = new ItemSprayCan(DyeColor.PINK);
+    public static ItemBasic<?> GraySprayCan = new ItemSprayCan(DyeColor.GRAY);
+    public static ItemBasic<?> LightGraySprayCan = new ItemSprayCan(DyeColor.LIGHT_GRAY);
+    public static ItemBasic<?> CyanSprayCan = new ItemSprayCan(DyeColor.CYAN);
+    public static ItemBasic<?> PurpleSprayCan = new ItemSprayCan(DyeColor.PURPLE);
+    public static ItemBasic<?> BlueSprayCan = new ItemSprayCan(DyeColor.BLUE);
+    public static ItemBasic<?> BrownSprayCan = new ItemSprayCan(DyeColor.BROWN);
+    public static ItemBasic<?> GreenSprayCan = new ItemSprayCan(DyeColor.GREEN);
+    public static ItemBasic<?> RedSprayCan = new ItemSprayCan(DyeColor.RED);
+    public static ItemBasic<?> BlackSprayCan = new ItemSprayCan(DyeColor.BLACK);
     /** CIRCUIT ITEMS **/
 
     public static ItemBasic<?> MicroProcessor = new ItemBasic<>(GTIRef.ID, "microprocessor", "circuits/").tip("A Basic Circuit");
@@ -62,7 +80,7 @@ public class GregTechItems {
     public static ItemBasic<?> CircuitWetware = new ItemBasic<>(GTIRef.ID, "wetware_circuit", "circuits/").tip("You feel like it's watching you");
     public static ItemBasic<?> SmallCoil = new ItemBasic<>(GTIRef.ID, "small_coil").tip("A part for circuits");
     public static ItemBasic<?> PetriDish = new ItemBasic<>(GTIRef.ID, "petri_dish");
-    public static ItemBasic<?> SiliconBoule = new ItemBasic<>(GTIRef.ID, "monocrystalline_silicon_boule", "silicon/");
+    //public static ItemBasic<?> SiliconBoule = new ItemBasic<>(GTIRef.ID, "monocrystalline_silicon_boule", "silicon/");
     public static ItemBasic<?> GlowstoneDopedSiliconBoule = new ItemBasic<>(GTIRef.ID, "glowstone_doped_monocrystalline_silicon_boule", "silicon/");
     public static ItemBasic<?> NaquadahDopedSiliconBoule = new ItemBasic<>(GTIRef.ID, "naquadah_doped_monocrystalline_silicon_boule", "silicon/");
     public static ItemBasic<?> Wafer = new ItemBasic<>(GTIRef.ID, "wafer", "silicon/");

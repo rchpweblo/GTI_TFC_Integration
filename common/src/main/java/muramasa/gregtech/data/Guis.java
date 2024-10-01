@@ -102,16 +102,17 @@ public class Guis {
         CANNER.add(IT_IN, 35, 25).add(IT_IN, 53, 25).add(IT_OUT, 107, 25).add(ENERGY, 80, 63);
         CIRCUIT_ASSEMBLER.add(ASSEMBLER);
         COMPRESSOR.add(IT_IN, 53, 25).add(IT_OUT, 107, 25).add(ENERGY, 80, 63);
+        CRYSTALLIZATION_CHAMBER.add(COMPRESSOR).add(FL_IN, 44, 63).add(FL_IN, 62, 63);
         CUTTER.add(IT_IN, 53, 25).add(FL_IN, 53, 63).add(IT_OUT, 107, 25).add(IT_OUT, 125, 25).add(ENERGY, 80, 63);
         FURNACE.add(IT_IN, 53, 25).add(IT_OUT, 107, 25).add(ENERGY, 80, 63);
         EXTRACTOR.add(COMPRESSOR);
         EXTRUDER.add(ALLOY_SMELTER);
         LATHE.add(IT_IN, 53, 25).add(IT_OUT, 107, 25).add(IT_OUT, 125, 25).add(ENERGY, 80, 63);
         MACERATOR.add(COMPRESSOR);
-        MACERATOR.add(MV, MACERATOR).add(MV, IT_OUT, 125, 25);
-        MACERATOR.add(HV, MACERATOR).add(HV, IT_OUT, 125, 25).add(HV, IT_OUT, 143, 25);
+        MACERATOR.add(HV, IT_IN, 53, 25).add(HV, IT_OUT, 107, 16).add(HV, IT_OUT, 125, 16).add(HV, IT_OUT, 107, 34)
+                .add(HV, IT_OUT, 125, 34).add(HV, ENERGY, 80, 63);
         MACERATOR.add(EV, IT_IN, 53, 25).add(EV, IT_OUT, 107, 16).add(EV, IT_OUT, 125, 16).add(EV, IT_OUT, 107, 34)
-                .add(EV, IT_OUT, 125, 34);
+                .add(EV, IT_OUT, 125, 34).add(EV, ENERGY, 80, 63);
         ROASTER.add(IT_IN, 53, 25).add(IT_OUT, 107, 16).add(IT_OUT, 125, 16).add(IT_OUT, 107, 34)
                 .add(IT_OUT, 125, 34).add(FL_IN, 53, 63).add(FL_OUT, 107, 63);
         RECYCLER.add(COMPRESSOR).add(FL_IN, 53, 63);
@@ -142,6 +143,7 @@ public class Guis {
         MASS_FABRICATOR.add(COMPRESSOR).add(FL_IN, 53, 63).add(FL_OUT, 107, 63);
         AMP_FABRICATOR.add(COMPRESSOR).add(FL_IN, 53, 63).add(FL_OUT, 107, 63);
         REPLICATOR.add(FLUID_CANNER);
+        ROCK_BREAKER.add(COMPRESSOR);
         FERMENTER.add(FLUID_CANNER);
         FLUID_PRESS.add(IT_IN, 53, 25).add(ENERGY, 80, 63).add(FL_OUT, 107, 63);
         SMELTER.add(FLUID_PRESS);
@@ -210,7 +212,7 @@ public class Guis {
         COMBUSTION_GENERATOR.add(BASIC_TANK.getSlots());
         SEMIFLUID_GENERATOR.add(BASIC_TANK.getSlots());
         NAQUADAH_GENERATOR.add(BASIC_TANK.getSlots());
-        NUCLEAR_REACTOR_CORE.add(STORAGE, 70, 25).add(STORAGE, 70, 43).add(STORAGE, 88, 25).add(STORAGE, 88, 43);
+        NUCLEAR_REACTOR_CORE.add(STORAGE, 70, 25).add(STORAGE, 70, 43).add(STORAGE, 88, 25).add(STORAGE, 88, 43).add(FL_IN, 70, 61).add(FL_OUT, 88, 61);
         SMALL_HEAT_EXCHANGER.add(IT_IN, 53, 25).add(IT_OUT, 107, 25).add(FL_IN, 44, 63).add(FL_IN, 62, 63)
                 .add(FL_OUT,107,63).add(FL_OUT,125,63);
 
@@ -324,6 +326,7 @@ public class Guis {
 
     public static void backgroundTextures(){
         MACERATOR.getGui().setBackgroundTexture("machine_macerator");
+        ROCK_BREAKER.getGui().setBackgroundTexture("machine_macerator");
         //FORGE_HAMMER.getGui().setBackgroundTexture("machine_forge_hammer");
         CENTRIFUGE.getGui().setBackgroundTexture("centrifuge");
         ELECTROLYZER.getGui().setBackgroundTexture("centrifuge");
@@ -346,11 +349,14 @@ public class Guis {
         TREE_GROWTH_SIMULATOR.getGui().setBackgroundTexture("multiblock");
         VACUUM_FREEZER.getGui().setBackgroundTexture("multiblock");
         MULTI_SMELTER.getGui().setBackgroundTexture("multiblock");
+        LARGE_AUTOCLAVE.getGui().setBackgroundTexture("multiblock");
         LARGE_BOILER.getGui().setBackgroundTexture("multiblock");
+        LARGE_BATHING_VAT.getGui().setBackgroundTexture("multiblock");
         LARGE_CENTRIFUGE.getGui().setBackgroundTexture("multiblock");
         LARGE_CHEMICAL_REACTOR.getGui().setBackgroundTexture("multiblock");
         LARGE_ELECTROLYZER.getGui().setBackgroundTexture("multiblock");
-        LARGE_MACERATOR.getGui().setBackgroundTexture("multiblock");
+        LARGE_PULVERIZER.getGui().setBackgroundTexture("multiblock");
+        LARGE_ORE_WASHER.getGui().setBackgroundTexture("multiblock");
         LARGE_TURBINE.getGui().setBackgroundTexture("multiblock");
         LARGE_HEAT_EXCHANGER.getGui().setBackgroundTexture("multiblock");
         OIL_DRILLING_RIG.getGui().setBackgroundTexture("multiblock");
@@ -375,6 +381,7 @@ public class Guis {
         EXTRUDER.getGui().getMachineData().setProgressLocation("extruder");
         LATHE.getGui().getMachineData().setProgressLocation("lathe");
         MACERATOR.getGui().getMachineData().setProgressLocation("macerator");
+        ROCK_BREAKER.getGui().getMachineData().setProgressLocation("macerator");
         WIRE_MILL.getGui().getMachineData().setProgressLocation("wiremill");
         CENTRIFUGE.getGui().getMachineData().setProgressLocation("extractor");
         ELECTROLYZER.getGui().getMachineData().setProgressLocation("extractor");

@@ -90,6 +90,8 @@ public class RecipeMaps {
             new RecipeMap<>(GTIRef.ID, "combustion_fuels", new RecipeBuilder()));
     public static RecipeMap<RecipeBuilder> COMPRESSOR = AntimatterAPI.register(RecipeMap.class,
             new RecipeMap<>(GTIRef.ID, "compressor", new SteamBuilder(STEAM_COMPRESSOR)));
+    public static RecipeMap<RecipeBuilder> CRYSTALLIZATION_CHAMBER = AntimatterAPI.register(RecipeMap.class,
+            new RecipeMap<>(GTIRef.ID, "crystallization_chamber", new RecipeBuilder()));
     public static RecipeMap<RecipeBuilder> CUTTER = AntimatterAPI.register(RecipeMap.class,
             new RecipeMap<>(GTIRef.ID, "cutter", new RecipeBuilder()));
     public static RecipeMap<RecipeBuilder> CRACKING = AntimatterAPI.register(RecipeMap.class,
@@ -149,7 +151,7 @@ public class RecipeMaps {
     public static RecipeMap<RecipeBuilder> LATHE = AntimatterAPI.register(RecipeMap.class,
             new RecipeMap<>(GTIRef.ID, "lathe", new RecipeBuilder()));
     public static RecipeMap<RecipeBuilder> MACERATOR = AntimatterAPI.register(RecipeMap.class,
-            new RecipeMap<>(GTIRef.ID, "macerator", new SteamBuilder(STEAM_MACERATOR)).setGuiTier(Tier.EV));
+            new RecipeMap<>(GTIRef.ID, "macerator", new SteamBuilder(STEAM_MACERATOR)));
     public static RecipeMap<RecipeBuilder> MASS_FABRICATOR = AntimatterAPI.register(RecipeMap.class,
             new RecipeMap<>(GTIRef.ID, "mass_fabricator", new RecipeBuilder()));
     public static RecipeMap<RecipeBuilder> MIXER = AntimatterAPI.register(RecipeMap.class,
@@ -166,6 +168,8 @@ public class RecipeMaps {
             new RecipeMap<>(GTIRef.ID, "polarizer", new RecipeBuilder()));
     public static RecipeMap<RecipeBuilder> PLASMA_FUELS = AntimatterAPI.register(RecipeMap.class,
             new RecipeMap<>(GTIRef.ID, "plasma_fuels", new RecipeBuilder()));
+    public static RecipeMap<RecipeBuilder> PULVERIZER = AntimatterAPI.register(RecipeMap.class,
+            new RecipeMap<>(GTIRef.ID, "pulverizer", new PulverizerBuilder()).setGuiTier(Tier.HV));
     public static RecipeMap<RecipeBuilder> FORMING_PRESS = AntimatterAPI.register(RecipeMap.class,
             new RecipeMap<>(GTIRef.ID, "forming_press", new RecipeBuilder()));
     public static RecipeMap<RecipeBuilder> PRINTING = AntimatterAPI.register(RecipeMap.class,
@@ -179,6 +183,8 @@ public class RecipeMaps {
             new RecipeMap<>(GTIRef.ID, "recycler", new RecipeBuilder()));
     public static RecipeMap<RecipeBuilder> REPLICATOR = AntimatterAPI.register(RecipeMap.class,
             new RecipeMap<>(GTIRef.ID, "replicating", new RecipeBuilder()));
+    public static RecipeMap<RecipeBuilder> ROCK_BREAKER = AntimatterAPI.register(RecipeMap.class,
+            new RecipeMap<>(GTIRef.ID, "rock_breaker", new RecipeBuilder()));
     public static RecipeMap<RecipeBuilder> SCANNER = AntimatterAPI.register(RecipeMap.class,
             new RecipeMap<>(GTIRef.ID, "scanning", new RecipeBuilder()));
 
@@ -228,7 +234,8 @@ public class RecipeMaps {
     public static final IRecipeInfoRenderer LARGE_BOILER_RENDERER = new IRecipeInfoRenderer() {
         @Override
         public void render(PoseStack stack, IRecipe recipe, Font fontRenderer, int guiOffsetX, int guiOffsetY) {
-            String duration = "Duration: " + recipe.getDuration() + " ticks (" + (recipe.getDuration() / 20.0f) + " s)";
+            String additional = recipe.getDuration() < 1200 ? "" : recipe.getDuration() < 36000 ? " (" + (recipe.getDuration() / 20.0f) + " secs)" : " (" + (recipe.getDuration() / 1200.0f) + " mins)";
+            String duration = "Duration: " + recipe.getDuration() + " ticks" + additional;
             String extraBurntime = "Extra saved Burntime: " + recipe.getPower();
             String heatIncreaseMultiplier = "Heat increase multiplier: " + (Math.max(recipe.getSpecialValue(), 1));
             renderString(stack, duration, fontRenderer, 5, 0, guiOffsetX, guiOffsetY);
@@ -245,7 +252,8 @@ public class RecipeMaps {
     public static final IRecipeInfoRenderer HEAT_EXCHANGER_RENDERER = new IRecipeInfoRenderer() {
         @Override
         public void render(PoseStack stack, IRecipe recipe, Font fontRenderer, int guiOffsetX, int guiOffsetY) {
-            String duration = "Duration: " + recipe.getDuration() + " ticks (" + (recipe.getDuration() / 20.0f) + " s)";
+            String additional = recipe.getDuration() < 1200 ? "" : recipe.getDuration() < 36000 ? " (" + (recipe.getDuration() / 20.0f) + " secs)" : " (" + (recipe.getDuration() / 1200.0f) + " mins)";
+            String duration = "Duration: " + recipe.getDuration() + " ticks" + additional;
             String extraBurntime = "HU/t: " + recipe.getPower();
             String heatIncreaseMultiplier = "Total HU: " + (recipe.getPower() * recipe.getDuration());
             String heatExchanger = recipe.getSpecialValue() == 1 ? "Works in both Small and Large Heat Exchangers" : (recipe.getSpecialValue() == -1 ? "Small" : "Large") + " Heat Exchanger only";
@@ -264,7 +272,8 @@ public class RecipeMaps {
     public static final IRecipeInfoRenderer FUSION_RENDERER = new IRecipeInfoRenderer() {
         public void render(PoseStack stack, IRecipe recipe, Font fontRenderer, int guiOffsetX, int guiOffsetY) {
             if (recipe.getDuration() == 0 && recipe.getPower() == 0) return;
-            String power = "Duration: " + recipe.getDuration() + " ticks (" + (recipe.getDuration() / 20.0f) + " s)";
+            String additional = recipe.getDuration() < 1200 ? "" : recipe.getDuration() < 36000 ? " (" + (recipe.getDuration() / 20.0f) + " secs)" : " (" + (recipe.getDuration() / 1200.0f) + " mins)";
+            String power = "Duration: " + recipe.getDuration() + " ticks" + additional;
             String output = recipe.getPower() < 0 ? "Output: " : "Input: ";
             String euT = output + Math.abs(recipe.getPower()) + " " + (recipe.getPower() < 0 ? "H" : "E") + "U/t";
             String total = "Total: " + Math.abs(recipe.getPower()) * recipe.getDuration() + " EU";
@@ -288,7 +297,8 @@ public class RecipeMaps {
         @Override
         public void render(PoseStack stack, IRecipe recipe, Font fontRenderer, int guiOffsetX, int guiOffsetY) {
             if (recipe.getDuration() == 0 && recipe.getPower() == 0) return;
-            String power = "Duration: " + recipe.getDuration() + " ticks (" + (recipe.getDuration() / 20.0f) + " s)";
+            String additional = recipe.getDuration() < 1200 ? "" : recipe.getDuration() < 36000 ? " (" + (recipe.getDuration() / 20.0f) + " secs)" : " (" + (recipe.getDuration() / 1200.0f) + " mins)";
+            String power = "Duration: " + recipe.getDuration() + " ticks" + additional;
             String euT = "EU/t: " + recipe.getPower();
             String total = "Total: " + recipe.getPower() * recipe.getDuration() + " EU";
             String complicated = recipe.getSpecialValue() == -1 ? "Complicated Recipe" : null;
@@ -311,6 +321,30 @@ public class RecipeMaps {
             if (toLarge){
                 renderString(stack, "Large chem reactor only", fontRenderer, 5, complicated != null ? 40 : 30, guiOffsetX, guiOffsetY);
             }
+        }
+
+        @Override
+        public int getRows() {
+            return 5;
+        }
+    };
+
+    public static final IRecipeInfoRenderer MACERATOR_RENDERER = new IRecipeInfoRenderer() {
+        public void render(PoseStack stack, IRecipe recipe, Font fontRenderer, int guiOffsetX, int guiOffsetY) {
+            if (recipe.getDuration() == 0 && recipe.getPower() == 0) return;
+            String additional = recipe.getDuration() < 1200 ? "" : recipe.getDuration() < 36000 ? " (" + (recipe.getDuration() / 20.0f) + " secs)" : " (" + (recipe.getDuration() / 1200.0f) + " mins)";
+            String power = "Duration: " + recipe.getDuration() + " ticks" + additional;
+            String euT = "EU/t: " + recipe.getPower();
+            String amps = "Amps: " + recipe.getAmps();
+            String total = "Total: " + recipe.getPower() * recipe.getDuration() + " EU";
+            Tier tier = Tier.getTier((recipe.getPower() / recipe.getAmps()));
+            String formattedText = " (" + tier.getId().toUpperCase() + ")";
+            renderString(stack, power, fontRenderer, 5, 0, guiOffsetX, guiOffsetY);
+            renderString(stack, euT, fontRenderer, 5, 10, guiOffsetX, guiOffsetY);
+            renderString(stack, formattedText, fontRenderer, 5 + stringWidth(euT, fontRenderer), 10, Tier.EV.getRarityFormatting().getColor(), guiOffsetX, guiOffsetY);
+            renderString(stack, amps, fontRenderer, 5, 20, guiOffsetX, guiOffsetY);
+            renderString(stack, total, fontRenderer, 5, 30, guiOffsetX, guiOffsetY);
+            renderString(stack, "Secondary outputs only available in pulverizers and large macerator", fontRenderer, 5, 40, guiOffsetX, guiOffsetY);
         }
 
         @Override
@@ -360,5 +394,22 @@ public class RecipeMaps {
         HEAT_EXCHANGER.setInfoRenderer(HEAT_EXCHANGER_RENDERER);
         FUSION.setInfoRenderer(FUSION_RENDERER);
         CHEMICAL_REACTOR.setInfoRenderer(CHEM_RENDERER);
+        PULVERIZER.setInfoRenderer(MACERATOR_RENDERER);
+    }
+
+    public static class PulverizerBuilder extends RecipeBuilder{
+        @Override
+        public IRecipe add(String domain, String id) {
+            IRecipe recipe = super.add(domain, id);
+            var  recipeBuilder = MACERATOR.RB().hide().ii(recipe.getInputItems());
+            if (recipe.hasOutputItems() && recipe.getOutputItems().length > 0) {
+                recipeBuilder.io(recipe.getOutputItems(false)[0]);
+            }
+            if (recipe.hasOutputChances() && recipe.getOutputChances().length > 0) {
+                recipeBuilder.outputChances(recipe.getOutputChances()[0]);
+            }
+            recipeBuilder.inputChances(recipe.getInputChances()).add(domain, id, recipe.getDuration(), recipe.getPower(), recipe.getSpecialValue(), recipe.getAmps());
+            return recipe;
+        }
     }
 }

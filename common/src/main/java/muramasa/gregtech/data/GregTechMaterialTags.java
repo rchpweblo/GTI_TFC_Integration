@@ -14,6 +14,7 @@ public class GregTechMaterialTags {
     public static final MaterialTag ELEC60 = AntimatterAPI.register(MaterialTag.class, new MaterialTag("elec60", true));
     public static final MaterialTag ELEC90 = AntimatterAPI.register(MaterialTag.class, new MaterialTag("elec90", true));
     public static final MaterialTag ELEC120 = AntimatterAPI.register(MaterialTag.class, new MaterialTag("elec120", true));
+    public static final MaterialTag ELEC_CIRCUIT = new MaterialTag("elec_circuit");
 
     public static final NumberMaterialTag ELEC_TICKS = (NumberMaterialTag) AntimatterAPI.register(MaterialTag.class, new NumberMaterialTag("elec_ticks", true));
     public static final MaterialTag CENT = new MaterialTag("cent"); //Add Centrifuging Recipes - SHOULD NOT SHARE MATS WITH ELEC
@@ -27,7 +28,8 @@ public class GregTechMaterialTags {
 
     public static final MaterialTag SEMIFUELS = new MaterialTag("semi_fuels");
     public static final MaterialTag GRINDABLE = new MaterialTag("grindable"); //Is Grindable with the Mortar
-    public static final MaterialTag CRYSTALLIZE = new MaterialTag("crystallize"); //Allows Dust > Gem Recipes
+    public static final MaterialTag CRYSTALLIZE = new MaterialTag("crystallize"); //Allows Dust > Gem Recipes in autoclave
+    public static final MaterialTag NON_GEMS = new MaterialTag("non_gems"); //Gems that aren't really gems
     public static final MaterialTag CALCITE2X = new MaterialTag("calcite_2x"); //Blast Furnace Calcite 2x Multiplier
     public static final MaterialTag CALCITE3X = new MaterialTag("calcite_3x"); //Blast Furnace Calcite 3x Multiplier
     public static final MaterialTag NOSMELT = new MaterialTag("no_smelt"); //Material is not able to be smelted
@@ -44,8 +46,9 @@ public class GregTechMaterialTags {
     public static final MaterialTag NEEDS_BLAST_FURNACE = AntimatterAPI.register(MaterialTag.class, new MaterialTag("needs_blast_furnace", true));
     public static final NumberMaterialTag RECIPE_MASS = (NumberMaterialTag) AntimatterAPI.register(MaterialTag.class, new NumberMaterialTag("recipe_mass", true));
     public static final NumberMaterialTag BLAST_FURNACE_TEMP = (NumberMaterialTag) AntimatterAPI.register(MaterialTag.class, new NumberMaterialTag("blast_furnace_temp", true));
-    public static final DoubleMaterialTag CHEMBATH_MERCURY = new DoubleMaterialTag("chembath_mercury");
-    public static final DoubleMaterialTag CHEMBATH_PERSULFATE = new DoubleMaterialTag("chembath_persulfate");
+    public static final DoubleMaterialTag BATH_MERCURY = new DoubleMaterialTag("bath_mercury");
+    public static final DoubleMaterialTag BATH_PERSULFATE = new DoubleMaterialTag("bath_persulfate");
+    public static final DoubleMaterialTag THERMAL_CENTRIFUGE_EXPLICIT = new DoubleMaterialTag("thermal_centrifuge_explicit");
     public static final ListMaterialTag<FluidProduct> DISTILL_INTO = new ListMaterialTag<>("distill_into");
     public static final NumberMaterialTag DISTILLATION_FLUID_INPUT_AMOUNT = new NumberMaterialTag("distillation_fluid_input_amount");
 }

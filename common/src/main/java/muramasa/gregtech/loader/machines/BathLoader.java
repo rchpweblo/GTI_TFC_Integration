@@ -9,23 +9,29 @@ import muramasa.antimatter.data.AntimatterMaterials;
 import muramasa.antimatter.material.Material;
 import muramasa.antimatter.material.MaterialTypeBlock;
 import muramasa.antimatter.material.MaterialTypeItem;
+import muramasa.antimatter.recipe.ingredient.FluidIngredient;
 import muramasa.antimatter.recipe.ingredient.RecipeIngredient;
 import muramasa.antimatter.util.AntimatterPlatformUtils;
+import muramasa.antimatter.util.TagUtils;
+import muramasa.gregtech.GTIRef;
 import muramasa.gregtech.GregTechConfig;
 import muramasa.gregtech.data.GregTechItems;
 import muramasa.gregtech.integration.SpaceModRegistrar;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluid;
 import tesseract.FluidPlatformUtils;
 
 import static muramasa.antimatter.Ref.L;
 import static muramasa.antimatter.Ref.U;
 import static muramasa.antimatter.data.AntimatterMaterialTypes.*;
 import static muramasa.antimatter.data.AntimatterMaterials.*;
-import static muramasa.gregtech.data.GregTechMaterialTags.CHEMBATH_MERCURY;
-import static muramasa.gregtech.data.GregTechMaterialTags.CHEMBATH_PERSULFATE;
+import static muramasa.gregtech.data.GregTechMaterialTags.BATH_MERCURY;
+import static muramasa.gregtech.data.GregTechMaterialTags.BATH_PERSULFATE;
 import static muramasa.gregtech.data.Materials.*;
 import static muramasa.gregtech.data.RecipeMaps.*;
 
@@ -53,7 +59,9 @@ public class BathLoader {
                 .add("netherized_diamond_recipe",144);
         BATH.RB().ii(DUST.getMaterialIngredient(Tungstate, 7)).fi(HydrochloricAcid.getLiquid(4000)).io(DUST.get(LithiumChloride, 4), DUST.get(TungsticAcid, 7)).add("tungstate", 512);
         BATH.RB().ii(DUST.getMaterialIngredient(Scheelite, 6)).fi(HydrochloricAcid.getLiquid(4000)).io(DUST.get(CalciumChloride, 3), DUST.get(TungsticAcid, 7)).add("scheelite", 512);
-        BATH.RB().ii(GTCoreItems.CarbonFibre).fi(EpoxyResin.getLiquid(L)).io(PLATE.get(FiberReinforcedEpoxyResin)).add("fiber_reinforced_epoxy_resin", 240);
+        if (GregTechConfig.HARDER_CIRCUITS) {
+            BATH.RB().ii(GTCoreItems.CarbonFibre).fi(EpoxyResin.getLiquid(L)).io(PLATE.get(FiberReinforcedEpoxyResin)).add("fiber_reinforced_epoxy_resin", 240);
+        }
         if (GregTechConfig.HARDER_ALUMINIUM_PROCESSING.get()){
             BATH.RB().ii(DUST.getMaterialIngredient(SodiumAluminate, 4)).fi(Water.getLiquid(6000)).io(DUST.get(AluminiumHydroxide, 7), DUST.get(SodiumHydroxide, 3)).add("aluminium_hydroxide", 102 * 20);
             BATH.RB().ii(DUST.getMaterialIngredient(SodiumAluminate, 4)).fi(DistilledWater.getLiquid(6000)).io(DUST.get(AluminiumHydroxide, 7), DUST.get(SodiumHydroxide, 3)).add("aluminium_hydroxide_distilled_water", 102 * 20);
@@ -70,9 +78,27 @@ public class BathLoader {
                 }
             });
         }
+        for (DyeColor dye : DyeColor.values()){
+            String dyeName = dye.getName() + "_dye";
+            TagKey<Fluid> dyeLiquid = TagUtils.getFluidTag(new ResourceLocation(GTIRef.ID, dyeName));
+            BATH.RB().fi(FluidIngredient.of(dyeLiquid, L / 8)).ii(Items.GLASS).io(AntimatterPlatformUtils.getItemFromID(new ResourceLocation(dye.getName() + "_stained_glass"))).add(dye.getName() + "_stained_glass", 64);
+            BATH.RB().fi(FluidIngredient.of(dyeLiquid, L / 8)).ii(Items.GLASS_PANE).io(AntimatterPlatformUtils.getItemFromID(new ResourceLocation(dye.getName() + "_stained_glass_pane"))).add(dye.getName() + "_stained_glass_pane", 64);
+            BATH.RB().fi(FluidIngredient.of(dyeLiquid, L / 8)).ii(Items.TERRACOTTA).io(AntimatterPlatformUtils.getItemFromID(new ResourceLocation(dye.getName() + "_terracotta"))).add(dye.getName() + "_terracotta", 64);
+            BATH.RB().fi(FluidIngredient.of(dyeLiquid, L / 2)).ii(Items.CANDLE).io(AntimatterPlatformUtils.getItemFromID(new ResourceLocation(dye.getName() + "_candle"))).add(dye.getName() + "_candle", 64);
+            BATH.RB().fake().ii(Items.SHULKER_BOX).fi(FluidIngredient.of(dyeLiquid, L / 2)).io(AntimatterPlatformUtils.getItemFromID(new ResourceLocation(dye.getName() + "_shulker_box"))).add(dye.getName() + "_shulker_box", 64);
+            BATH.RB().fake().ii(AntimatterPlatformUtils.getItemFromID(new ResourceLocation(dye.getName() + "_shulker_box"))).fi(Chlorine.getGas(50)).io(Items.SHULKER_BOX).add("shulker_box_from_" + dye.getName(), 64);
+
+            if (dye != DyeColor.WHITE){
+                BATH.RB().fi(FluidIngredient.of(dyeLiquid, L / 2)).ii(Items.WHITE_WOOL).io(AntimatterPlatformUtils.getItemFromID(new ResourceLocation(dye.getName() + "_wool"))).add(dye.getName() + "_wool", 64);
+                BATH.RB().fi(Chlorine.getGas(50)).ii(AntimatterPlatformUtils.getItemFromID(new ResourceLocation(dye.getName() + "_wool"))).io(Items.WHITE_WOOL).add("white_wool_from_" + dyeName, 400);
+                BATH.RB().fi(Chlorine.getGas(25)).ii(AntimatterPlatformUtils.getItemFromID(new ResourceLocation(dye.getName() + "_carpet"))).io(Items.WHITE_CARPET).add("white_carpet_from_" + dyeName, 400);
+                BATH.RB().fi(FluidIngredient.of(dyeLiquid, L / 2)).ii(Items.WHITE_BED).io(AntimatterPlatformUtils.getItemFromID(new ResourceLocation(dye.getName() + "_bed"))).add(dye.getName() + "_bed", 64);
+                BATH.RB().fi(Chlorine.getGas(50)).ii(AntimatterPlatformUtils.getItemFromID(new ResourceLocation(dye.getName() + "_bed"))).io(Items.WHITE_BED).add("white_bed_from_" + dyeName, 400);
+            }
+        }
         mercurybathing();
         persulfatebathing();
-        BATH.RB().ii(CRUSHED.getMaterialIngredient(Cobaltite, 1)).fi(SodiumPersulfate.getLiquid(1000)).io(CRUSHED_PURIFIED.get(Cobaltite), CRUSHED_PURIFIED.get(Cobalt), DUST.get(Stone)).outputChances(1.0, 0.25, 1.0).add("persulfate_cobaltite", 144);
+        BATH.RB().ii(CRUSHED.getMaterialIngredient(Cobaltite, 1)).fi(SodiumPersulfateSolution.getLiquid(1000)).io(CRUSHED_PURIFIED.get(Cobaltite), CRUSHED_PURIFIED.get(Cobalt), DUST.get(Stone)).outputChances(1.0, 0.25, 1.0).add("persulfate_cobaltite", 144);
         addVitriolRecipe(Chalcopyrite, BlueVitriol);
         addVitriolRecipe(Copper, BlueVitriol);
         addVitriolRecipe(Gold, BlueVitriol);
@@ -113,11 +139,11 @@ public class BathLoader {
         addPSGRecipe(Iridium);
         addPSGRecipe(Nickel);
         addPSGRecipe(Osmium);
-        addPSGRecipe(Palladium);
+        addPSGRecipe(Sperrylite);
         addPSGRecipe(Platinum);
     }
     public static void mercurybathing(){
-        CHEMBATH_MERCURY.getAll().forEach((main,side) ->
+        BATH_MERCURY.getAll().forEach((main, side) ->
             BATH.RB()
                     .ii(RecipeIngredient.of(AntimatterMaterialTypes.CRUSHED.get(main),1))
                     .fi(Mercury.getLiquid(1000))
@@ -126,10 +152,10 @@ public class BathLoader {
                     .add("mercury_" + main.getId(),40*20));
     }
     public static void persulfatebathing(){
-        CHEMBATH_PERSULFATE.getAll().forEach((main,side) ->
+        BATH_PERSULFATE.getAll().forEach((main, side) ->
                 BATH.RB()
                         .ii(RecipeIngredient.of(AntimatterMaterialTypes.CRUSHED.get(main),1))
-                        .fi(SodiumPersulfate.getLiquid(1000))
+                        .fi(SodiumPersulfateSolution.getLiquid(1000))
                         .io(new ItemStack(AntimatterMaterialTypes.CRUSHED_PURIFIED.get(main)),new ItemStack(AntimatterMaterialTypes.DUST.get(side)),new ItemStack(AntimatterMaterialTypes.DUST.get(AntimatterMaterials.Stone)))
                         .outputChances(1.0, 0.7, 1.0)
                         .add("persulfate_"+main.getId(),40*20));

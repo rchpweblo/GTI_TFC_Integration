@@ -1,18 +1,40 @@
 {
+	"credit": "Made with Blockbench",
 	"elements": [
 		{
 			"from": [0, 0, 0],
-			"to": [16, 16, 0],
+			"to": [16, 16, 2],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#base", "tintindex": 0}
+				"north": {"uv": [0, 0, 16, 16], "texture": "#base", "tintindex": 0},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#base", "tintindex": 0}
 			}
 		},
 		{
 			"from": [0, 0, 0],
-			"to": [16, 16, 0],
+			"to": [16, 16, 2],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#overlay"}
+				"north": {"uv": [0, 0, 16, 16], "texture": "#overlay"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#overlay"}
+			}
+		},
+		{
+			"from": [2, 2, 1.99],
+			"to": [14, 14, 1.99],
+			"color": 7,
+			"faces": {
+				"north": {"uv": [2, 2, 14, 14], "texture": "#missing"}
 			}
 		}
-	]
+	],
+	"groups": [
+		0,
+		1,
+		{
+			"name": "in:0:1",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [2]
+		}
+	],
+	"loader": "antimatter:machine_side"
 }

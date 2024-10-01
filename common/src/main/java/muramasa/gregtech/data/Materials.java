@@ -5,8 +5,8 @@ import io.github.gregtechintergalactical.gtcore.data.GTCoreMaterials;
 import muramasa.antimatter.AntimatterAPI;
 import muramasa.antimatter.Ref;
 import muramasa.antimatter.material.Material;
-import muramasa.antimatter.material.TextureSet;
 import muramasa.gregtech.GTIRef;
+import net.minecraft.world.item.DyeColor;
 
 import static muramasa.antimatter.material.Element.*;
 import static muramasa.antimatter.material.TextureSet.*;
@@ -251,6 +251,7 @@ public class Materials {
     public static Material SodaAsh = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "soda_ash", 0xdcdcff, DULL));
     public static Material SodiumAluminate = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sodium_aluminate", 0xE6E6FA, NONE));
     public static Material SodiumBisulfate = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sodium_bisulfate", 0x004455, NONE));
+    public static Material SodiumPersulfate = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sodium_persulfate", 0x82b4fa, NONE));
     public static Material SodiumHydroxide = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sodium_hydroxide", 0x003380, DULL));
     public static Material SodiumSulfate = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sodium_sulfate", 0x004455, NONE));
     public static Material SodiumSulfide = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sodium_sulfide", 0xffe680, NONE));
@@ -299,8 +300,9 @@ public class Materials {
     public static Material Scheelite = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "scheelite", 0xc88c14, DULL));
     public static Material Sheldonite = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sheldonite", 0xffffc8, METALLIC));
     public static Material Soapstone = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "soapstone", 0x5f915f, DULL)); // TODO: Ore Gen;
+    public static Material Sperrylite = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sperrylite", 0x696969, SHINY));
     public static Material Spessartine = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "spessartine", 0xff6464, DULL));
-    public static Material Sphalerite = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sphalerite", 0xffffff, DULL));
+    public static Material Sphalerite = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sphalerite", 0xdede00, DULL));
     public static Material Spodumene = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "spodumene", 0xbeaaaa, DULL));
     public static Material Stibnite = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "stibnite", 0x464646, METALLIC));
     public static Material Talc = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "talc", 0x5ab45a, DULL));
@@ -338,14 +340,12 @@ public class Materials {
     public static Material ChargedCertusQuartz = AntimatterAPI.register(Material.class,new Material(GTIRef.ID, "charged_certus_quartz", 0xd2d2e6, QUARTZ, Ref.MOD_AE));
     public static Material Fluix = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "fluix", 0x78468C, QUARTZ, Ref.MOD_AE));
     public static Material CoalCoke = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "coal_coke", 0x8c8caa, LIGNITE));
-    public static Material Dilithium = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "dilithium", 0xfffafa, DIAMOND));
     public static Material Glass = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "glass", 0xfafafa, SHINY));
     public static Material GreenSapphire = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "green_sapphire", 0x64c882, GEM_H));
     public static Material Jade = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "jade", 0x64ff7d, LAPIS));
     public static Material Lazurite = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "lazurite", 0x6478ff, LAPIS));
     public static Material LigniteCoke = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "lignite_coke", 0x8c6464, LIGNITE));
     public static Material Monazite = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "monazite", 0x324632, DIAMOND));
-    public static Material NetherStar = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "nether_star", 0xffffff, NONE));
     public static Material Olivine = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "olivine", 0x96ff96, RUBY));
     public static Material Opal = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "opal", 0x0000ff, RUBY));
     public static Material RedGarnet = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "red_garnet", 0xc85050, GARNET));
@@ -400,6 +400,43 @@ public class Materials {
     /**
      *** Fluids
      **/
+
+    /**
+     * Dye Fluids
+     */
+    public static Material WaterMixedWhiteDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_white_dye", GregTechData.getColorFromDyeColor(DyeColor.WHITE), NONE));
+    public static Material WaterMixedOrangeDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_orange_dye", GregTechData.getColorFromDyeColor(DyeColor.ORANGE), NONE));
+    public static Material WaterMixedMagentaDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_magenta_dye", GregTechData.getColorFromDyeColor(DyeColor.MAGENTA), NONE));
+    public static Material WaterMixedLightBlueDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_light_blue_dye", GregTechData.getColorFromDyeColor(DyeColor.LIGHT_BLUE), NONE));
+    public static Material WaterMixedYellowDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_yellow_dye", GregTechData.getColorFromDyeColor(DyeColor.YELLOW), NONE));
+    public static Material WaterMixedLimeDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_lime_dye", GregTechData.getColorFromDyeColor(DyeColor.LIME), NONE));
+    public static Material WaterMixedPinkDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_pink_dye", GregTechData.getColorFromDyeColor(DyeColor.PINK), NONE));
+    public static Material WaterMixedGrayDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_gray_dye", GregTechData.getColorFromDyeColor(DyeColor.GRAY), NONE));
+    public static Material WaterMixedLightGrayDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_light_gray_dye", GregTechData.getColorFromDyeColor(DyeColor.LIGHT_GRAY), NONE));
+    public static Material WaterMixedCyanDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_cyan_dye", GregTechData.getColorFromDyeColor(DyeColor.CYAN), NONE));
+    public static Material WaterMixedPurpleDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_purple_dye", GregTechData.getColorFromDyeColor(DyeColor.PURPLE), NONE));
+    public static Material WaterMixedBlueDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_blue_dye", GregTechData.getColorFromDyeColor(DyeColor.BLUE), NONE));
+    public static Material WaterMixedBrownDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_brown_dye", GregTechData.getColorFromDyeColor(DyeColor.BROWN), NONE));
+    public static Material WaterMixedGreenDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_green_dye", GregTechData.getColorFromDyeColor(DyeColor.GREEN), NONE));
+    public static Material WaterMixedRedDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_red_dye", GregTechData.getColorFromDyeColor(DyeColor.RED), NONE));
+    public static Material WaterMixedBlackDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "water_mixed_black_dye", GregTechData.getColorFromDyeColor(DyeColor.BLACK), NONE));
+
+    public static Material ChemicalWhiteDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_white_dye", GregTechData.getColorFromDyeColor(DyeColor.WHITE), NONE));
+    public static Material ChemicalOrangeDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_orange_dye", GregTechData.getColorFromDyeColor(DyeColor.ORANGE), NONE));
+    public static Material ChemicalMagentaDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_magenta_dye", GregTechData.getColorFromDyeColor(DyeColor.MAGENTA), NONE));
+    public static Material ChemicalLightBlueDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_light_blue_dye", GregTechData.getColorFromDyeColor(DyeColor.LIGHT_BLUE), NONE));
+    public static Material ChemicalYellowDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_yellow_dye", GregTechData.getColorFromDyeColor(DyeColor.YELLOW), NONE));
+    public static Material ChemicalLimeDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_lime_dye", GregTechData.getColorFromDyeColor(DyeColor.LIME), NONE));
+    public static Material ChemicalPinkDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_pink_dye", GregTechData.getColorFromDyeColor(DyeColor.PINK), NONE));
+    public static Material ChemicalGrayDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_gray_dye", GregTechData.getColorFromDyeColor(DyeColor.GRAY), NONE));
+    public static Material ChemicalLightGrayDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_light_gray_dye", GregTechData.getColorFromDyeColor(DyeColor.LIGHT_GRAY), NONE));
+    public static Material ChemicalCyanDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_cyan_dye", GregTechData.getColorFromDyeColor(DyeColor.CYAN), NONE));
+    public static Material ChemicalPurpleDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_purple_dye", GregTechData.getColorFromDyeColor(DyeColor.PURPLE), NONE));
+    public static Material ChemicalBlueDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_blue_dye", GregTechData.getColorFromDyeColor(DyeColor.BLUE), NONE));
+    public static Material ChemicalBrownDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_brown_dye", GregTechData.getColorFromDyeColor(DyeColor.BROWN), NONE));
+    public static Material ChemicalGreenDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_green_dye", GregTechData.getColorFromDyeColor(DyeColor.GREEN), NONE));
+    public static Material ChemicalRedDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_red_dye", GregTechData.getColorFromDyeColor(DyeColor.RED), NONE));
+    public static Material ChemicalBlackDye = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "chemical_black_dye", GregTechData.getColorFromDyeColor(DyeColor.BLACK), NONE));
 
     /**
      ** Organic
@@ -495,9 +532,7 @@ public class Materials {
     public static Material NitricAcid = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "nitric_acid", 0xe6e2ab, NONE));
     public static Material PeroxydisulfuricAcid = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "peroxydisulfuricacid", 0xff9000, NONE));
     public static Material SaltWater = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "salt_water", 0x0760b9, NONE));
-    public static Material SodiumBicarbonateSolution = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sodium_bicarbonate_solution", 0xffffff, NONE));
-    public static Material SodiumCarbonateSolution = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sodium_carbonate_solution", 0xffffff, NONE));
-    public static Material SodiumPersulfate = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sodium_persulfate", 0x006646, NONE));
+    public static Material SodiumPersulfateSolution = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sodium_perfulate_solution", 0x006646, NONE));
     public static Material SulfuricAcid = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "sulfuric_acid", 0xff8000, NONE));
     public static Material Tar = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "tar", 0x0a0a0a, NONE));
     public static Material ThoriumSalt = AntimatterAPI.register(Material.class, new Material(GTIRef.ID, "thorium_salt", 0x001e00, NONE));

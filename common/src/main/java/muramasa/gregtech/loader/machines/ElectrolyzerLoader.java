@@ -1,6 +1,7 @@
 package muramasa.gregtech.loader.machines;
 
 import earth.terrarium.botarium.common.fluid.base.FluidHolder;
+import io.github.gregtechintergalactical.gtcore.data.GTCoreItems;
 import muramasa.antimatter.data.AntimatterMaterialTypes;
 import muramasa.antimatter.material.Material;
 import muramasa.antimatter.material.MaterialTags;
@@ -17,6 +18,7 @@ import net.minecraft.world.item.Items;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.github.gregtechintergalactical.gtcore.data.GTCoreItems.SELECTOR_TAG_INGREDIENTS;
 import static muramasa.antimatter.Ref.L;
 import static muramasa.antimatter.data.AntimatterMaterialTypes.*;
 import static muramasa.antimatter.data.AntimatterMaterials.*;
@@ -49,12 +51,13 @@ public class ElectrolyzerLoader {
                 prefix = "fluid";
                 b.fi(t.getFluidIngredient(inputAmount * 1000));
             }
-            if (t == Water || t == DistilledWater){
-                b.ii(TierMaps.INT_CIRCUITS.get(1));
+            if (t.has(ELEC_CIRCUIT)){
+                b.ii(SELECTOR_TAG_INGREDIENTS.get(1));
             }
             long duration = t.has(ELEC_TICKS) ? ELEC_TICKS.getInt(t) : t.getMass() * 20;
             b.io(items).fo(fluids).add(prefix + "_" + t.getId(),duration, euPerTick);
         });
+        ELECTROLYZER.RB().ii(DUST.getMaterialIngredient(SodiumBisulfate, 2), WIRE_FINE.getMaterialIngredient(Platinum, 1).setNoConsume()).io(DUST.get(SodiumPersulfate)).fo(Hydrogen.getGas(1000)).add("sodium_persulfate_creation", 600, 30);
         ELECTROLYZER.RB().ii(RecipeIngredient.of(ItemTags.SAND, 8)).io(DUST.get(Materials.SiliconDioxide)).add("sand_to_silicon_dioxide", 500, 25);
         ELECTROLYZER.RB().ii(RecipeIngredient.of(GregTechTags.DUST_SANDS, 32)).io(DUST.get(Materials.SiliconDioxide)).add("sand_dusts_to_silicon_dioxide", 500, 25);
         ELECTROLYZER.RB().ii(RecipeIngredient.of(Items.BONE_MEAL, 3)).io(DUST.get(Materials.Calcium)).add("bone_meal", 98, 26);
@@ -83,16 +86,16 @@ public class ElectrolyzerLoader {
             addVitriolRecipe(CyanVitriol, Nickel);
             addVitriolRecipe(WhiteVitriol, Zinc);
             addVitriolRecipe(GrayVitriol, Manganese);
-            ELECTROLYZER.RB().fi(Water.getLiquid(900), VitriolOfClay.getLiquid(1700)).ii(TierMaps.INT_CIRCUITS.get(1)).io(DUST_SMALL.get(Alumina, 2)).fo(SulfuricAcid.getLiquid(2100)).add("vitriol_of_clay_to_alumina", 19, 64);
-            ELECTROLYZER.RB().fi(DistilledWater.getLiquid(900), VitriolOfClay.getLiquid(1700)).ii(TierMaps.INT_CIRCUITS.get(1)).io(DUST_SMALL.get(Alumina, 2)).fo(SulfuricAcid.getLiquid(2100)).add("vitriol_of_clay_to_alumina_distilled", 19, 64);
-            ELECTROLYZER.RB().fi(Water.getLiquid(6000), ChloroplatinicAcid.getLiquid(9000)).ii(TierMaps.INT_CIRCUITS.get(2)).io(DUST.get(Platinum)).fo(HydrochloricAcid.getLiquid(12000), Oxygen.getGas(2000)).add("chloroplatinic_acid", 96, 64);
-            ELECTROLYZER.RB().fi(DistilledWater.getLiquid(6000), ChloroplatinicAcid.getLiquid(9000)).ii(TierMaps.INT_CIRCUITS.get(2)).io(DUST.get(Platinum)).fo(HydrochloricAcid.getLiquid(12000), Oxygen.getGas(2000)).add("chloroplatinic_acid_distilled", 96, 64);
+            ELECTROLYZER.RB().fi(Water.getLiquid(900), VitriolOfClay.getLiquid(1700)).ii(SELECTOR_TAG_INGREDIENTS.get(1)).io(DUST_SMALL.get(Alumina, 2)).fo(SulfuricAcid.getLiquid(2100)).add("vitriol_of_clay_to_alumina", 19, 64);
+            ELECTROLYZER.RB().fi(DistilledWater.getLiquid(900), VitriolOfClay.getLiquid(1700)).ii(SELECTOR_TAG_INGREDIENTS.get(1)).io(DUST_SMALL.get(Alumina, 2)).fo(SulfuricAcid.getLiquid(2100)).add("vitriol_of_clay_to_alumina_distilled", 19, 64);
+            ELECTROLYZER.RB().fi(Water.getLiquid(6000), ChloroplatinicAcid.getLiquid(9000)).ii(SELECTOR_TAG_INGREDIENTS.get(2)).io(DUST.get(Platinum)).fo(HydrochloricAcid.getLiquid(12000), Oxygen.getGas(2000)).add("chloroplatinic_acid", 96, 64);
+            ELECTROLYZER.RB().fi(DistilledWater.getLiquid(6000), ChloroplatinicAcid.getLiquid(9000)).ii(SELECTOR_TAG_INGREDIENTS.get(2)).io(DUST.get(Platinum)).fo(HydrochloricAcid.getLiquid(12000), Oxygen.getGas(2000)).add("chloroplatinic_acid_distilled", 96, 64);
         }
     }
 
     private static void addVitriolRecipe(Material vitriol, Material dust){
-        ELECTROLYZER.RB().fi(vitriol.getLiquid(6000), Water.getLiquid(3000)).ii(TierMaps.INT_CIRCUITS.get(2)).io(DUST.get(dust)).fo(SulfuricAcid.getLiquid(7000), Oxygen.getGas(1000)).add(vitriol.getId() + "_to_" + dust.getId(), 64, 64);
-        ELECTROLYZER.RB().fi(vitriol.getLiquid(6000), DistilledWater.getLiquid(3000)).ii(TierMaps.INT_CIRCUITS.get(2)).io(DUST.get(dust)).fo(SulfuricAcid.getLiquid(7000), Oxygen.getGas(1000)).add(vitriol.getId() + "_to_" + dust.getId() + "_distilled", 64, 64);
+        ELECTROLYZER.RB().fi(vitriol.getLiquid(6000), Water.getLiquid(3000)).ii(SELECTOR_TAG_INGREDIENTS.get(2)).io(DUST.get(dust)).fo(SulfuricAcid.getLiquid(7000), Oxygen.getGas(1000)).add(vitriol.getId() + "_to_" + dust.getId(), 64, 64);
+        ELECTROLYZER.RB().fi(vitriol.getLiquid(6000), DistilledWater.getLiquid(3000)).ii(SELECTOR_TAG_INGREDIENTS.get(2)).io(DUST.get(dust)).fo(SulfuricAcid.getLiquid(7000), Oxygen.getGas(1000)).add(vitriol.getId() + "_to_" + dust.getId() + "_distilled", 64, 64);
     }
 
 }

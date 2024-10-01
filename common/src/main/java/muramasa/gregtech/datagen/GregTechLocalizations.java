@@ -2,19 +2,17 @@ package muramasa.gregtech.datagen;
 
 
 import muramasa.antimatter.AntimatterAPI;
+import muramasa.antimatter.Ref;
 import muramasa.antimatter.datagen.providers.AntimatterLanguageProvider;
 import muramasa.antimatter.item.ItemBasic;
-import muramasa.antimatter.machine.Tier;
 import muramasa.antimatter.util.Utils;
 import muramasa.gregtech.GTIRef;
 import muramasa.gregtech.block.*;
 import muramasa.gregtech.data.GregTechBlocks;
+import muramasa.gregtech.data.GregTechCovers;
 import muramasa.gregtech.data.GregTechItems;
 import muramasa.gregtech.items.ItemDepletedRod;
-import muramasa.gregtech.items.ItemIntCircuit;
 import muramasa.gregtech.items.ItemNuclearFuelRod;
-
-import java.util.Locale;
 
 import static muramasa.antimatter.machine.Tier.*;
 import static muramasa.antimatter.util.Utils.*;
@@ -37,8 +35,7 @@ public class GregTechLocalizations {
             add(GTIRef.ID + ".rei.tooltip.ore.byproducts", "Ore Byproducts List");
             add(GTIRef.ID + ".rei.tooltip.material_tree", "Material Tree");
             add("machine.transformer.voltage_info", "%s -> %s (Use Soft Hammer to invert)");
-            add("machine.gti.large_boiler.production", "Produces %sL of Steam with 1 Coal at %sL/s");
-            add("machine.gti.large_boiler.circuit", "A programmed circuit in the main block throttles the boiler (-1000L/s per config)");
+            add("machine.upgraded_batch.parallel", "Runs up to %s recipes at a time");
             add(GTIRef.ID + ".rotor.tooltip.efficiency", "Turbine Efficiency: %s");
             add(GTIRef.ID + ".rotor.tooltip.steam_flow", "Optimal Steam flow: %sL/sec");
             add(GTIRef.ID + ".rotor.tooltip.gas_flow", "Optimal Gas flow(EU burnvalue per tick): %sEU/t");
@@ -63,6 +60,7 @@ public class GregTechLocalizations {
             add("tooltip.gti.data_stick.by", "By X: %s Z: %s Dim: %s");
             add("tooltip.gti.coil.percentage", "Pyrolysis oven processing speed percentage: %s");
             add("tooltip.gti.coil.maxSimultaneousRecipes", "Max simultaneous recipes in Multismelter: %s");
+            add("tooltip.gti.coil.autoclaveBoosts", "Large Autoclave processing speed: %s");
             add("tooltip.gti.depleted_rod.depleted", "Depleted");
             add("tooltip.gti.depleted_rod.0", "This Rod is %s and will not output or accept any Neutrons");
             add("tooltip.gti.depleted_rod.1", "Can be centrifuged to get valuable materials");
@@ -119,77 +117,237 @@ public class GregTechLocalizations {
             add("message.gti.needs_maintenance.scaled.inverted", "Outputs a scaled signal (Inverted)");
             add("message.gti.needs_maintenance.unscaled.normal", "Outputs a flat signal");
             add("message.gti.needs_maintenance.unscaled.inverted", "Outputs a flat signal (Inverted)");
+            add("tooltip.gti.spray_can.full", "Full");
+            add("tooltip.gti.spray_can.used", "Used");
+            add("tooltip.gti.spray_can.0", "Can color things in %s");
+            add("tooltip.gti.spray_can.1", "Remaining uses: %s");
+            add("tooltip.macerator.0", "Crushes Raw ores down to crushed ore and byproducts. Macerator gives no byproducts, Pulverizer gives byproducts");
             structureTranslations();
+            advancements();
         }
 
         private void structureTranslations(){
-            add("tooltip.electric_blast_furnace.0", "Controller for the Electrical Blast Furnace");
-            add("tooltip.electric_blast_furnace.1", "Size(WxHxD): 3x4x3");
-            add("tooltip.electric_blast_furnace.2", "Controller (bottom Middle front centered)");
-            add("tooltip.electric_blast_furnace.3", "1x Item Input Hatch (Minimum 1) Bottom Layer outside ring");
-            add("tooltip.electric_blast_furnace.4", "1x Item Output Hatch Bottom Layer outside ring");
-            add("tooltip.electric_blast_furnace.5", "1x Energy Hatch Bottom Layer outside ring");
-            add("tooltip.electric_blast_furnace.6", "16x Coils Blocks, 2 layers of rings of x8  Coil Blocks, each middle layers (The center of both layers should be empty)");
-            add("tooltip.electric_blast_furnace.7", "8x Heat Proof Casings around a Muffler Hatch (facing up) on top Layer");
-            add("tooltip.electric_blast_furnace.8", "2 -4 Amps of power supply");
+            add("tooltip.electric_blast_furnace.0", "Controller Block for the Electric Blast Furnace");
+            add("tooltip.electric_blast_furnace.1", "Size(WxHxD): 3x4x3 (Hollow) Controller (Front middle bottom)");
+            add("tooltip.electric_blast_furnace.2", "16x Heating Coils (2 middle Layers, hollow)");
+            add("tooltip.electric_blast_furnace.3", "1x Item Input Hatch (Any bottom layer casing)");
+            add("tooltip.electric_blast_furnace.4", "1x Item Output Hatch (Any bottom layer casing)");
+            add("tooltip.electric_blast_furnace.5", "1x Energy Hatch (Any bottom layer casing)");
+            add("tooltip.electric_blast_furnace.6", "1x Muffler Hatch (Top middle)");
+            add("tooltip.electric_blast_furnace.7", "Heat Proof Casings for the rest");
+            add("tooltip.electric_blast_furnace.8", "Each 900K over the min. Heat Capacity grants 5% speedup (multiplicatively)");
+            add("tooltip.electric_blast_furnace.9", "Each 1800K over the min. Heat Capacity allows for one upgraded overclock");
+            add("tooltip.electric_blast_furnace.10", "Upgraded overclocks reduce recipe time to 25% and increase EU/t to 400%");
 
-            add("tooltip.combustion_engine.0", "Controller for the Large Combustion Engine");
-            add("tooltip.combustion_engine.1", "Size(WxHxD): 3x3x4");
-            add("tooltip.combustion_engine.2", "Controller (front centered)");
-            add("tooltip.combustion_engine.3", "3x3x4 of Stable Titanium Casing (hollow, Min 24!)");
-            add("tooltip.combustion_engine.4", "2x Titanium Gear Box Casing inside the Hollow Casing ");
-            add("tooltip.combustion_engine.5", "8x Engine Intake Casings (around controller Min 8!)");
-            add("tooltip.combustion_engine.6", "1x Input Hatch (one of the Casings)");
-            add("tooltip.combustion_engine.7", "1x Muffler Hatch (Top middle back)");
-            add("tooltip.combustion_engine.8", "1x Dynamo Hatch (back centered) ");
-            add("tooltip.combustion_engine.9", "Engine Intake Casings not obstructed (only air blocks)");
+            add("tooltip.combustion_engine.0", "Controller Block for the Large Combustion Engine");
+            add("tooltip.combustion_engine.1", "Size(WxHxD): 3x3x4, Controller (front centered)");
+            add("tooltip.combustion_engine.2", "3x3x4 of Stable Titanium Casing (hollow, Min 16!)");
+            add("tooltip.combustion_engine.3", "2x Titanium Gear Box Casing inside the Hollow Casing");
+            add("tooltip.combustion_engine.4", "8x Engine Intake Casings (around controller)");
+            add("tooltip.combustion_engine.5", "2x Input Hatch (one of the Casings next to a gearbox)");
+            add("tooltip.combustion_engine.6", "1x Muffler Hatch (Top middle back, next to the rear gearbox)");
+            add("tooltip.combustion_engine.7", "1x Dynamo Hatch (back centered) ");
+            add("tooltip.combustion_engine.8", "Engine Intake Casings not obstructed (only air blocks)");
+            add("tooltip.combustion_engine.9", "Supply Flammable Fuels and 1000L of Lubricant per hour to run");
+            add("tooltip.combustion_engine.10", "Supply 40L of Oxygen per second to boost output (optional)");
+            add("tooltip.combustion_engine.11", "Default: Produces 2048EU/t at 100% efficiency");
+            add("tooltip.combustion_engine.12", "Boosted: Produces 6144EU/t at 150% efficiency");
 
-            add("tooltip.cracking_unit.0", "Controller for the Oil Cracking Unit");
-            add("tooltip.cracking_unit.1", "Size(WxHxD): 5x3x3");
-            add("tooltip.cracking_unit.2", "Controller (middle front centered)");
-            add("tooltip.cracking_unit.3", "3x3x4 Titanium Casing (hollow, Min 22!)");
-            add("tooltip.cracking_unit.4", "16x Cupronickel Coils Blocks, two hollow vertical rings touching each side of the controller");
-            add("tooltip.cracking_unit.5", "1x Fluid Input Hatch on the Right Side Middle Center of Vertical Ring  the oil product");
-            add("tooltip.cracking_unit.6", "1x Fluid Input Hatch  on any of the center Casing Ring  For Steam input");
-            add("tooltip.cracking_unit.7", "1x Fluid Output Hatch on the Left Side Middle  Center of Vertical Ring  for Cracked Product");
-            add("tooltip.cracking_unit.8", "1x Energy Hatch (Any of the center Casing Ring)");
-            add("tooltip.cracking_unit.9", "18-21x Stainless Steel Casing Elsewhere");
-            add("tooltip.cracking_unit.10", "Optional 1x Item Hatch Input or 1x Item Hatch Output  on the middle Ring Casings");
+            add("tooltip.cracking_unit.0", "Controller Block for the Oil Cracking Unit");
+            add("tooltip.cracking_unit.1", "Size(WxHxD): 5x3x3 (Hollow) Controller (Front center)");
+            add("tooltip.cracking_unit.2", "Ring of 8 Cupronickel Coils (Each side of Controller)");
+            add("tooltip.cracking_unit.3", "1x Fluid Input Hatch (Left side center casing)(For hydrocarbons");
+            add("tooltip.cracking_unit.4", "1x Fluid Input Hatch (Any middle ring casing)(For steam/Hydrogen)");
+            add("tooltip.cracking_unit.5", "1x Fluid Output hatch (Right side center casing) (Outputs cracked product");
+            add("tooltip.cracking_unit.6", "1x Energy Hatch (Any middle ring casing)");
+            add("tooltip.cracking_unit.7", "Clean Stainless Steel Casings for the rest (18 at least!)");
+            add("tooltip.cracking_unit.8", "Optional 1x Item Hatch Input or 1x Item Hatch Output  on the middle Ring Casings");
 
-            add("tooltip.distillation_tower.0", "Controller for the Distillation Tower");
-            add("tooltip.distillation_tower.1", "Size(WxHxD): 3xNx3(where N is between three and twelve)");
-            add("tooltip.distillation_tower.2", "Controller (middle bottom front centered)");
-            add("tooltip.distillation_tower.3", "1x Energy Hatch any bottom layer casing");
-            add("tooltip.distillation_tower.4", "1x+ Item Output Hatch any bottom layer casing");
-            add("tooltip.distillation_tower.5", "1x+ Fluid Input Hatch any bottom layer casing");
-            add("tooltip.distillation_tower.6", "1-11x Fluid Output Hatch exactly one per layer (except the bottom layer)");
-            add("tooltip.distillation_tower.7", "19-82x Stainless Steel  Casings, everywhere else.");
+            add("tooltip.distillation_tower.0", "Controller Block for the Distillation Tower");
+            add("tooltip.distillation_tower.1", "Size(WxHxD): 3xhx3(with h ranging from 3 to 12)");
+            add("tooltip.distillation_tower.2", "Controller (Front bottom)");
+            add("tooltip.distillation_tower.3", "1x Fluid Input Hatch (Any bottom layer casing)");
+            add("tooltip.distillation_tower.4", "2-11x Fluid Output Hatch (One per layer except bottom layer)");
+            add("tooltip.distillation_tower.5", "1x Item Output Hatch (Any bottom layer casing)");
+            add("tooltip.distillation_tower.6", "1x Energy Hatch (Any bottom layer casing)");
+            add("tooltip.distillation_tower.7", "Clean Stainless Steel Casings for the rest (7 x h - 4 at least)");
 
-            add("tooltip.cryo_distillation_tower.0", "Controller for the Cryogenic Distillation Tower");
-            add("tooltip.cryo_distillation_tower.1", "Size(WxHxD): 3xNx3(where N is between three and twelve)");
-            add("tooltip.cryo_distillation_tower.2", "Controller (middle bottom front centered)");
-            add("tooltip.cryo_distillation_tower.3", "1x Energy Hatch any bottom layer casing");
-            add("tooltip.cryo_distillation_tower.4", "1x+ Item Output Hatch any bottom layer casing");
-            add("tooltip.cryo_distillation_tower.5", "1x+ Fluid Input Hatch any bottom layer casing");
-            add("tooltip.cryo_distillation_tower.6", "1-11x Fluid Output Hatch exactly one per layer (except the bottom layer)");
-            add("tooltip.cryo_distillation_tower.7", "19-82x Frostproof Casings, everywhere else.");
+            add("tooltip.cryo_distillation_tower.0", "Controller Block for the Cryo Distillation Tower");
+            add("tooltip.cryo_distillation_tower.1", "Size(WxHxD): 3xhx3(with h ranging from 3 to 12)");
+            add("tooltip.cryo_distillation_tower.2", "Controller (Front bottom)");
+            add("tooltip.cryo_distillation_tower.3", "1x Fluid Input Hatch (Any bottom layer casing)");
+            add("tooltip.cryo_distillation_tower.4", "2-11x Fluid Output Hatch (One per layer except bottom layer)");
+            add("tooltip.cryo_distillation_tower.5", "1x Item Output Hatch (Any bottom layer casing)");
+            add("tooltip.cryo_distillation_tower.6", "1x Energy Hatch (Any bottom layer casing)");
+            add("tooltip.cryo_distillation_tower.7", "Frostproof Casings for the rest (7 x h - 4 at least)");
 
-            add("tooltip.large_heat_exchanger.0", "Controller for the Heat Exchanger");
-            add("tooltip.large_heat_exchanger.1", "Size(WxHxD): 3x4x3");
-            add("tooltip.large_heat_exchanger.2", "Controller (middle bottom front centered)");
-            add("tooltip.large_heat_exchanger.3", "2x Fluid Input Hatch, one center of bottom layer (facing down for Hot Fluid input), the other any exterior casing of mid layers");
-            add("tooltip.large_heat_exchanger.4", "2x Fluid Output Hatch, one center of top layer (facing up), the other any exterior casing of mid layers");
-            add("tooltip.large_heat_exchanger.5", "2x Titanium Pipe Casings (center two blocks of multi, not visible from outside)");
-            add("tooltip.large_heat_exchanger.6", "21-30x Titanium Casings, everywhere else.");
+            add("tooltip.large_heat_exchanger.0", "Controller Block for the Heat Exchanger");
+            add("tooltip.large_heat_exchanger.1", "Size(WxHxD): 3x4x3, Controller (Front middle at bottom)");
+            add("tooltip.large_heat_exchanger.2", "3x3x4 of Stable Titanium Casings (hollow, min 24!)");
+            add("tooltip.large_heat_exchanger.3", "1x Distiller Water Input (Any mid layer casing)");
+            add("tooltip.large_heat_exchanger.4", "1x Steam Output (Any mid layer casing)");
+            add("tooltip.large_heat_exchanger.5", "1x Hot Fluid Input (Bottom Center)");
+            add("tooltip.large_heat_exchanger.6", "1x Cold Fluid Output (Top Center)");
 
-            add("tooltip.implosion_compressor.0", "Controller for the Implosion Compressor");
-            add("tooltip.implosion_compressor.1", "Size(WxHxD): 3x3x3");
-            add("tooltip.implosion_compressor.2", "Controller (middle front centered)");
-            add("tooltip.implosion_compressor.3", "17-20x  Solid Steel Casings (Hollow Cube)");
-            add("tooltip.implosion_compressor.4", "None or 1+ Item Output hatch on any Sides");
-            add("tooltip.implosion_compressor.5", "None or 1+ Item Input Hatch on any Sides");
-            add("tooltip.implosion_compressor.6", "1x+ Energy Hatch on any Sides");
-            add("tooltip.implosion_compressor.7", "1x Muffler Hatch on any Sides");
+            add("tooltip.implosion_compressor.0", "Controller Block for the Implosion Compressor");
+            add("tooltip.implosion_compressor.1", "Size(WxHxD): 3x3x3 (Hollow), Controller (Front centered)");
+            add("tooltip.implosion_compressor.2", "1x Item Input Hatch (Any casing)");
+            add("tooltip.implosion_compressor.3", "1x Item Output Hatch (Any casing)");
+            add("tooltip.implosion_compressor.4", "1x Muffler Hatch (Any casing)");
+            add("tooltip.implosion_compressor.5", "1x Energy Hatch (Any casing)");
+            add("tooltip.implosion_compressor.6", "Solid Steel Casings for the rest (17 at least!)");
+
+            add("tooltip.large_autoclave.0", "Controller Block for the LArge Autoclave");
+            add("tooltip.large_autoclave.1", "Runs up to 16 Items at once");
+            add("tooltip.large_autoclave.2", "Size(WxHxD):3x3x3 (Hollow), Controller (Front middle at bottom)");
+            add("tooltip.large_autoclave.3", "1x Coil at Bottom center");
+            add("tooltip.large_autoclave.4", "1x Item Input Hatch (Any casing)");
+            add("tooltip.large_autoclave.5", "1x Item Output Hatch (Any casing)");
+            add("tooltip.large_autoclave.6", "1x Fluid Input Hatch (Any casing)");
+            add("tooltip.large_autoclave.7", "1x Energy Hatch (Any casing)");
+            add("tooltip.large_autoclave.8", "Stainless Steel Casings for the rest");
+
+            add("tooltip.large_bathing_vat.0", "Controller Block for the Large Bathing Vat");
+            add("tooltip.large_bathing_vat.1", "Runs up to 64 Items at once");
+            add("tooltip.large_bathing_vat.2", "Size(WxHxD): 5x2x5, Controller (Front middle at bottom)");
+            add("tooltip.large_bathing_vat.3", "1x Item Input Hatch (Any casing)");
+            add("tooltip.large_bathing_vat.4", "1x Item Output Hatch (Any casing)");
+            add("tooltip.large_bathing_vat.5", "1x Fluid Input Hatch (Any casing)");
+            add("tooltip.large_bathing_vat.6", "1-3x Fluid Output Hatch (Any casing, optional)");
+            add("tooltip.large_bathing_vat.7", "Stainless Steel Walls for the rest (46 at most!)");
+
+            add("tooltip.large_boiler.0", "Controller Block for the Large Boiler");
+            add("tooltip.large_boiler.1", "Produces %sL of Steam with 1 Coal at %sL/s");
+            add("tooltip.large_boiler.2", "A programmed circuit in the main block throttles the boiler (-1000L/s per config)");
+            add("tooltip.large_boiler.3", "Size(WxHxD): 3x5x3, Controller (Front middle in fireboxes)");
+            add("tooltip.large_boiler.4", "3x1x3 of %s (Bottom layer, Min 4)");
+            add("tooltip.large_boiler.5", "3x4x3 of %s (above Fireboxes, hollow, Min 24!)");
+            add("tooltip.large_boiler.6", "1x3x1 of %s (Inside the Hollow Casings/Plated Bricks)");
+            add("tooltip.large_boiler.7", "1x Fuel Input Hatch (Any Firebox)");
+            add("tooltip.large_boiler.8", "1x Water Input Hatch (Any Firebox)");
+            add("tooltip.large_boiler.9", "1x Steam Output Hatch (Any Casing)");
+            add("tooltip.large_boiler.10", "1x Muffler Hatch (Any Firebox)");
+            add("tooltip.large_boiler.11", "Diesel fuels have 1/4 efficiency");
+            add("tooltip.large_boiler.12", "Takes %s seconds to heat up");
+
+            add("tooltip.large_centrifuge.0", "Controller Block for the Large Centrifuge");
+            add("tooltip.large_centrifuge.1", "Runs up to 16 recipes at a time");
+            add("tooltip.large_centrifuge.2", "Size(WxHxD): 3x2x3, Controller (Front middle at bottom)");
+            add("tooltip.large_centrifuge.3", "1x Input Hatch (Any casing except top middle)");
+            add("tooltip.large_centrifuge.4", "1x Output Hatch (Any casing except top middle)");
+            add("tooltip.large_centrifuge.5", "1x Energy Hatch (Any casing except top middle)");
+            add("tooltip.large_centrifuge.6", "Tungstensteel Casings for the rest (14 at most!)");
+
+            add("tooltip.large_chemical_reactor.0", "Controller Block for the Large Chemical Reactor");
+            add("tooltip.large_chemical_reactor.1", "Does not lose efficiency when overclocked");
+            add("tooltip.large_chemical_reactor.2", "Size(WxHxD): 3x3x3");
+            add("tooltip.large_chemical_reactor.3", "3x3x3 of Chemically Inert Casings (hollow, min 8!)");
+            add("tooltip.large_chemical_reactor.4", "Controller (Front centered)");
+            add("tooltip.large_chemical_reactor.5", "1x PTFE Pipe Casing (inside the hollow casings)");
+            add("tooltip.large_chemical_reactor.6", "1x Cupronickel Coil Block (Next to the PTFE Pipe Casing)");
+            add("tooltip.large_chemical_reactor.7", "1x Input Hatch (Any inert casing)");
+            add("tooltip.large_chemical_reactor.8", "1x Output Hatch (Any inert casing)");
+            add("tooltip.large_chemical_reactor.9", "1x Energy Hatch (Any inert casing)");
+
+            add("tooltip.large_electrolyzer.0", "Controller Block for the Large Electrolyzer");
+            add("tooltip.large_electrolyzer.1", "Runs up to x recipes at a time (x is dependent on the coils used)");
+            add("tooltip.large_electrolyzer.2", "Size(WxHxD): 5x2x5, Controller (Front middle at bottom)");
+            add("tooltip.large_electrolyzer.3", "3x3 of Electrolytic Cells in top middle");
+            add("tooltip.large_electrolyzer.4", "6 Nichrome coils to the left and right of the electrolytic cells(3 per side)");
+            add("tooltip.large_electrolyzer.5", "1x Input Hatch (Any casing except top middle)");
+            add("tooltip.large_electrolyzer.6", "1x Output Hatch (Any casing except top middle)");
+            add("tooltip.large_electrolyzer.7", "1x Energy Hatch (Any casing except top middle)");
+            add("tooltip.large_electrolyzer.8", "Stainless Steel Casings for the rest (32 at most!)");
+
+            add("tooltip.large_pulverizer.0", "Controller Block for the Large Pulverizer(AKA Macerator)");
+            add("tooltip.large_pulverizer.1", "Runs up to 16 recipes at a time");
+            add("tooltip.large_pulverizer.2", "Size(WxHxD): 5x3x5, Controller (Front middle at bottom)");
+            add("tooltip.large_pulverizer.3", "5x3x5 Basin of Tungstensteel Walls (Min 53!)");
+            add("tooltip.large_pulverizer.4", "3x2x3 of Grinding Wheels (Inside basin, exactly 18!)");
+            add("tooltip.large_pulverizer.5", "1x Item Input Hatch (Any Casing)");
+            add("tooltip.large_pulverizer.6", "1x Item Output Hatch (Any Casing)");
+            add("tooltip.large_pulverizer.7", "1x HV+ Energy Hatch (Any Casing)");
+
+            add("tooltip.large_turbine.0", "Controller Block for the %s");
+            add("tooltip.large_turbine.1", "Size(WxHxD): 3x3x4 (Hollow), Controller (Front centered)");
+            add("tooltip.large_turbine.2", "1x Fluid Input Hatch (Side centered)");
+            add("tooltip.large_turbine.3", "1x Muffler Hatch (Side centered)");
+            add("tooltip.large_turbine.4", "1x Dynamo Hatch (Back centered)");
+            add("tooltip.large_turbine.5", "%s for the rest (24 at least!)");
+            add("tooltip.large_turbine.6", "Needs a Turbine Item (Inside controller GUI)");
+            add("tooltip.large_turbine.7", "Output depending on Rotor: %sEU/t");
+
+            add("tooltip.multi_smelter.0", "Controller Block for the Multi Smelter");
+            add("tooltip.multi_smelter.1", "Smelts up to 8-1024 Items at once");
+            add("tooltip.multi_smelter.2", "Size(WxHxD):3x3x3 (Hollow), Controller (Front middle at bottom)");
+            add("tooltip.multi_smelter.3", "8x Heating Coils (Middle layer, hollow)");
+            add("tooltip.multi_smelter.4", "1x Item Input Hatch (One of bottom)");
+            add("tooltip.multi_smelter.5", "1x Item Output Hatch (One of bottom)");
+            add("tooltip.multi_smelter.6", "1x Muffler Hatch (Top middle)");
+            add("tooltip.multi_smelter.7", "1x Energy Hatch (One of bottom)");
+            add("tooltip.multi_smelter.8", "Heat Proof Casings for the rest");
+
+            add("tooltip.oil_drilling_rig.0", "Controller Block for the Oil Drilling Rig");
+            add("tooltip.oil_drilling_rig.1", "Size(WxHxD):3x7x3");
+            add("tooltip.oil_drilling_rig.2", "Controller (Front middle at bottom)");
+            add("tooltip.oil_drilling_rig.3", "3x1x3 Base of Solid Steel Casings");
+            add("tooltip.oil_drilling_rig.4", "1x3x1 Solid Steel Casing Pillar (Center of base)");
+            add("tooltip.oil_drilling_rig.5", "1x3x1 Steel Frames (Each pillar side and on top)");
+            add("tooltip.oil_drilling_rig.6", "1x Fluid Output Hatch (Any bottom layer casing)");
+            add("tooltip.oil_drilling_rig.7", "1x MV+ Energy Hatch (Any bottom layer casing)");
+            add("tooltip.oil_drilling_rig.8", "1x Item Output Hatch (Any bottom layer casing, optional)");
+
+            add("tooltip.processing_array.0", "Controller Block for the Processing Array");
+            add("tooltip.processing_array.1", "Runs supplied machines as if placed in the world");
+            add("tooltip.processing_array.2", "Size(WxHxD):3x3x3 (Hollow), Controller (Front centered)");
+            add("tooltip.processing_array.3", "1x Input Hatch (Any casing)");
+            add("tooltip.processing_array.4", "1x Output Hatch (Any Casing)");
+            add("tooltip.processing_array.5", "1x Energy Hatch (Any Casing)");
+            add("tooltip.processing_array.6", "Robust Tungstensteel Casings for the rest");
+            add("tooltip.processing_array.7", "Place up to 16 Single Block Machines into the GUI Inventory");
+
+            add("tooltip.vacuum_freezer.0", "Controller Block for the Vacuum Freezer");
+            add("tooltip.vacuum_freezer.1", "Super cools hot ingots and gases like Nitrogen");
+            add("tooltip.vacuum_freezer.2", "Size(WxHxD):3x3x3 (Hollow), Controller (Front centered)");
+            add("tooltip.vacuum_freezer.3", "1x Input Hatch (Any casing)");
+            add("tooltip.vacuum_freezer.4", "1x Output Hatch (Any Casing)");
+            add("tooltip.vacuum_freezer.5", "1x Energy Hatch (Any Casing)");
+            add("tooltip.vacuum_freezer.6", "Frost Proof Casings for the rest");
+
+            add("tooltip.fusion_control_computer.0", "It's over 9000!!!");
+            add("tooltip.fusion_control_computer.1", "Fusion Casings around Fusion Coils");
+            add("tooltip.fusion_control_computer.2", "2-16 Input Hatches");
+            add("tooltip.fusion_control_computer.3", "1-16 Output Hatches");
+            add("tooltip.fusion_control_computer.4", "1-16 Energy Hatches");
+            add("tooltip.fusion_control_computer.5", "All Energy Hatches must be LuV or better");
+            add("tooltip.fusion_control_computer.6", "8192EU/t and 40mio EU Cap per Energy Hatch");
+
+        }
+
+        private void advancements(){
+            addAdvancement("gti", "GTI", "Advancements of GTI");
+            addAdvancement("rock", "Pickup a rock of some kind");
+            addAdvancement("flint_pickaxe", "No wood tools allowed!", "Craft a flint pickaxe");
+            addAdvancement("raw_copper", "Find some copper ore and mine it");
+            addAdvancement("raw_tin", "Find some tin ore and mine it");
+            addAdvancement("mortar", "Craft a mortar");
+            addAdvancement("bronze_dust", "Make some bronze dust using a mortar");
+            addAdvancement("hammer", "Craft a hammer");
+            addAdvancement("bronze_solid_fuel_boiler", "Craft a Solid Fuel Boiler");
+            addAdvancement("bronze_steam_forge_hammer", "Craft a Steam Forge Hammer");
+            addAdvancement("bronze_steam_compressor", "Craft a Steam Compressor");
+            addAdvancement("fire_brick", "Craft a Fire Brick");
+            addAdvancement("coke_oven", "Craft a Coke Oven");
+        }
+
+        private void addAdvancement(String key, String translatedTitle, String translatedDesc){
+            add("gti.advancements." + key + ".title", translatedTitle);
+            add("gti.advancements." + key + ".desc", translatedDesc);
+        }
+
+        private void addAdvancement(String key, String translatedDesc){
+            add("gti.advancements." + key + ".title", Utils.lowerUnderscoreToUpperSpaced(key));
+            add("gti.advancements." + key + ".desc", translatedDesc);
         }
 
         @Override
@@ -223,7 +381,6 @@ public class GregTechLocalizations {
                     .replace("Hv", "(HV)")
                     .replace("Ev", "(EV)")
                     .replace("Iv", "(IV)")));
-            AntimatterAPI.all(ItemIntCircuit.class, domain).forEach(i -> override(i.getDescriptionId(), "Integrated Circuit (" + i.circuitId + ")"));
             AntimatterAPI.all(ItemNuclearFuelRod.class, domain).forEach(i -> override(i.getDescriptionId(), Utils.getLocalizedType(i.getMaterial()) + " Fuel Rod"));
             AntimatterAPI.all(ItemDepletedRod.class, domain).forEach(i -> override(i.getDescriptionId(), "Depleted " + Utils.getLocalizedType(i.getMaterial()) + " Fuel Rod"));
             String[] fluids = new String[]{"hot_molten_lithium_chloride", "hot_molten_tin", "hot_molten_sodium"};
@@ -239,14 +396,24 @@ public class GregTechLocalizations {
             override(LARGE_TURBINE, IV, "Large HP Steam Turbine");
             override(LARGE_BOILER, LV, "Large Bronze Boiler");
             override(LARGE_BOILER, MV, "Large Steel Boiler");
-            override(LARGE_BOILER, HV, "Large HP Titanium Boiler");
-            override(LARGE_BOILER, EV, "Large HP Tungstensteel Boiler");
+            override(LARGE_BOILER, HV, "Large Titanium Boiler");
+            override(LARGE_BOILER, EV, "Large Tungstensteel Boiler");
+            override(MACERATOR, HV, "Pulverizer (%s)");
+            override(MACERATOR, EV, "Pulverizer (%s)");
             override(GregTechItems.EmptyGeigerCounter.getDescriptionId(), "Geiger Counter (Empty)");
             add(GregTechBlocks.POWDER_BARREL, "Powder Barrel");
+            override(GregTechBlocks.CASING_BRONZE_PLATED_BRICK.getDescriptionId(), "Bronze Plated Bricks");
             override("machine.hull", "%s " + HULL.getLang(locale));
+            override(GregTechCovers.COVER_REDSTONE_CONDUCTOR_ACCEPT.getItem().getDescriptionId(), "Redstone Conductor (Accept)");
+            override(GregTechCovers.COVER_REDSTONE_CONDUCTOR_EMIT.getItem().getDescriptionId(), "Redstone Conductor (Emit)");
             HULL.getTiers().forEach(tier -> {
                 override(HULL, tier, tier.getId().toUpperCase() + " " + HULL.getLang(locale));
             });
+        }
+
+        @Override
+        protected void overrides() {
+            override(Ref.ID, "jei.category.pulverizer", "Macerator/Pulverizer");
         }
     }
 

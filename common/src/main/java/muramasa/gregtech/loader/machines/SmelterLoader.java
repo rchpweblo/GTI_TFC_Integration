@@ -10,12 +10,12 @@ import muramasa.antimatter.ore.CobbleStoneType;
 import muramasa.antimatter.recipe.ingredient.RecipeIngredient;
 import muramasa.antimatter.util.AntimatterPlatformUtils;
 import muramasa.antimatter.util.TagUtils;
+import muramasa.gregtech.GregTechConfig;
 import muramasa.gregtech.data.GregTechMaterialTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
-import static muramasa.antimatter.Ref.L;
-import static muramasa.antimatter.Ref.U;
+import static muramasa.antimatter.Ref.*;
 import static muramasa.antimatter.data.AntimatterMaterialTypes.*;
 import static muramasa.antimatter.data.AntimatterMaterialTypes.DUST;
 import static muramasa.antimatter.data.AntimatterMaterials.Lava;
@@ -29,14 +29,19 @@ public class SmelterLoader {
         MaterialTypeItem<?>[] items = new MaterialTypeItem<?>[]{INGOT, NUGGET, PLATE, PLATE_DENSE, ROD, ROD_LONG, RING, FOIL, BOLT, SCREW, GEAR, GEAR_SMALL, WIRE_FINE, ROTOR};
         for (MaterialTypeItem<?> item : items) {
             item.all().forEach(m -> {
-                add(m, item, item.getUnitValue());
+                long amount = m == Alumina ? (item.getUnitValue() * 7) / 2 : item.getUnitValue();
+                add(m, item, amount);
             });
         }
         DUST.all().forEach(m -> {
             if (m.has(LIQUID) && m.has(MOLTEN) && !m.has(GregTechMaterialTags.NEEDS_BLAST_FURNACE)){
-                add(m, DUST, DUST.getUnitValue());
+                long amount = m == Alumina ? (DUST.getUnitValue() * 7) / 2 : DUST.getUnitValue();
+                add(m, DUST, amount);
             }
         });
+        if (GregTechConfig.HARDER_ALUMINIUM_PROCESSING.get()){
+            SMELTER.RB().ii(DUST.getMaterialIngredient(AluminiumHydroxide, 1)).fo(Alumina.getLiquid(((L9 * 7 * 3) / 2) + (L9 * 3 / 4))).add("aluminium_hydroxide_to_alumina", 55, 16);
+        }
         addLava(Obsidian, ROD_LONG, ROD_LONG.getUnitValue());
         addLava(Obsidian, PLATE, PLATE.getUnitValue());
         addLava(Obsidian, DUST, DUST.getUnitValue());

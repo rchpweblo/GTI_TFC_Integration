@@ -1,26 +1,22 @@
 package muramasa.gregtech.material;
 
-import com.google.common.collect.ImmutableMap;
 import muramasa.antimatter.data.AntimatterMaterialTypes;
 import muramasa.antimatter.event.MaterialEvent;
 import muramasa.antimatter.material.IMaterialTag;
+import muramasa.antimatter.material.Material;
 import muramasa.antimatter.material.data.ToolData;
-import muramasa.antimatter.tool.AntimatterToolType;
 import muramasa.gregtech.data.GregTechMaterialTags;
-import net.minecraft.world.item.enchantment.Enchantment;
-
-import java.util.Arrays;
 
 import static muramasa.antimatter.material.MaterialTags.*;
 
 public class GregTechMaterialEvent extends MaterialEvent<GregTechMaterialEvent> {
     public GregTechMaterialEvent asSolid(int meltingPoint, int blastFurnaceTemp, IMaterialTag... tags) {
-        asSolid(meltingPoint, tags);
+        super.asSolid(meltingPoint, tags);
         GregTechMaterialTags.BLAST_FURNACE_TEMP.add(material, blastFurnaceTemp);
-        if (blastFurnaceTemp >= 1000){
+        if (blastFurnaceTemp >= 2000){
             flags(GregTechMaterialTags.NEEDS_BLAST_FURNACE, HAS_CUSTOM_SMELTING);
         }
-        if (blastFurnaceTemp > 1750) {
+        if (blastFurnaceTemp > 2400) {
             flags(AntimatterMaterialTypes.INGOT_HOT);
         }
         return this;
@@ -32,6 +28,24 @@ public class GregTechMaterialEvent extends MaterialEvent<GregTechMaterialEvent> 
         return this;
     }
 
+    public GregTechMaterialEvent forceBF(boolean hotIngot) {
+        flags(GregTechMaterialTags.NEEDS_BLAST_FURNACE, HAS_CUSTOM_SMELTING);
+        if (hotIngot) {
+            flags(AntimatterMaterialTypes.INGOT_HOT);
+        }
+        return this;
+    }
+
+    @Override
+    public GregTechMaterialEvent asSolid(int meltingPoint, IMaterialTag... tags) {
+        return asSolid(meltingPoint, meltingPoint, tags);
+    }
+
+    @Override
+    public GregTechMaterialEvent asMetal(int meltingPoint, IMaterialTag... tags) {
+        return asMetal(meltingPoint, meltingPoint, tags);
+    }
+
     public GregTechMaterialEvent elecTicks(int ticks){
         GregTechMaterialTags.ELEC_TICKS.add(material, ticks);
         return this;
@@ -41,5 +55,20 @@ public class GregTechMaterialEvent extends MaterialEvent<GregTechMaterialEvent> 
     protected GregTechMaterialEvent buildTool(ToolData builder) {
         flags(AntimatterMaterialTypes.ROD_LONG);
         return super.buildTool(builder);
+    }
+
+    public GregTechMaterialEvent thermal(Material byProduct){
+        GregTechMaterialTags.THERMAL_CENTRIFUGE_EXPLICIT.add(this.material, byProduct);
+        return this;
+    }
+
+    public GregTechMaterialEvent bathMercury(Material byProduct){
+        GregTechMaterialTags.BATH_MERCURY.add(this.material, byProduct);
+        return this;
+    }
+
+    public GregTechMaterialEvent bathPersulfate(Material byProduct){
+        GregTechMaterialTags.BATH_PERSULFATE.add(this.material, byProduct);
+        return this;
     }
 }

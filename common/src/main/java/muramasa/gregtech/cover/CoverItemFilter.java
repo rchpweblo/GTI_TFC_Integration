@@ -1,5 +1,6 @@
 package muramasa.gregtech.cover;
 
+import muramasa.antimatter.blockentity.BlockEntityBase;
 import muramasa.antimatter.blockentity.BlockEntityMachine;
 import muramasa.antimatter.blockentity.pipe.BlockEntityItemPipe;
 import muramasa.antimatter.blockentity.pipe.BlockEntityPipe;
@@ -29,7 +30,7 @@ public class CoverItemFilter extends CoverFilter {
         addGuiCallback(t -> {
             t.addSwitchButton(70, 34, 16, 16, ButtonOverlay.WHITELIST, ButtonOverlay.BLACKLIST, h -> blacklist, true, b -> "tooltip.gti." + (b ? "blacklist" : "whitelist"));
             t.addSwitchButton(88, 34, 16, 16, ButtonOverlays.NBT_OFF, ButtonOverlays.NBT_ON, h -> !ignoreNBT, true, b -> "tooltip.gti.nbt." + (b ? "on" : "off"));
-            t.addCycleButton(88, 34, 16, 15, h -> ((CoverItemFilter)h).filterMode, true, i -> "tooltip.gti.filter_mode." + i, ButtonOverlay.EXPORT_IMPORT, ButtonOverlay.IMPORT, ButtonOverlay.EXPORT);
+            t.addCycleButton(106, 34, 16, 15, h -> ((CoverItemFilter)h).filterMode, true, i -> "tooltip.gti.filter_mode." + i, ButtonOverlay.EXPORT_IMPORT, ButtonOverlay.IMPORT, ButtonOverlay.EXPORT);
         });;
     }
 
@@ -86,10 +87,14 @@ public class CoverItemFilter extends CoverFilter {
             GuiEvents.GuiEvent ev = (GuiEvents.GuiEvent) event;
             if (ev.data[1] == 0){
                 blacklist = !blacklist;
-                this.handler.getTile().setChanged();
+                if (this.handler.getTile() instanceof BlockEntityBase<?> base){
+                    base.sidedSync(true);
+                }
             } else if (ev.data[1] == 1){
                 ignoreNBT = !ignoreNBT;
-                this.handler.getTile().setChanged();
+                if (this.handler.getTile() instanceof BlockEntityBase<?> base){
+                    base.sidedSync(true);
+                }
             } else if (ev.data[1] == 2){
                 if (filterMode == 0){
                     filterMode = 1;
@@ -98,7 +103,9 @@ public class CoverItemFilter extends CoverFilter {
                 } else {
                     filterMode = 0;
                 }
-                this.handler.getTile().setChanged();
+                if (this.handler.getTile() instanceof BlockEntityBase<?> base){
+                    base.sidedSync(true);
+                }
             }
         }
     }

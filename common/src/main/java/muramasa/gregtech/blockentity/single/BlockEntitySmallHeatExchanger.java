@@ -1,37 +1,21 @@
 package muramasa.gregtech.blockentity.single;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import muramasa.antimatter.blockentity.BlockEntityMachine;
-import muramasa.antimatter.blockentity.multi.BlockEntityMultiMachine;
-import muramasa.antimatter.capability.IFilterableHandler;
+import earth.terrarium.botarium.common.fluid.base.FluidHolder;
 import muramasa.antimatter.capability.fluid.FluidTank;
 import muramasa.antimatter.capability.machine.DefaultHeatHandler;
+import muramasa.antimatter.capability.machine.MachineFluidHandler;
 import muramasa.antimatter.capability.machine.MachineRecipeHandler;
-import muramasa.antimatter.gui.GuiInstance;
-import muramasa.antimatter.gui.ICanSyncData;
-import muramasa.antimatter.gui.IGuiElement;
-import muramasa.antimatter.gui.SlotType;
-import muramasa.antimatter.gui.widget.InfoRenderWidget;
-import muramasa.antimatter.gui.widget.WidgetSupplier;
-import muramasa.antimatter.integration.jeirei.renderer.IInfoRenderer;
-import muramasa.antimatter.machine.event.IMachineEvent;
-import muramasa.antimatter.machine.event.MachineEvent;
 import muramasa.antimatter.machine.types.Machine;
 import muramasa.antimatter.material.Material;
 import muramasa.antimatter.recipe.IRecipe;
 import muramasa.antimatter.util.Utils;
-import muramasa.gregtech.items.ItemIntCircuit;
-import muramasa.gregtech.machine.caps.ParallelRecipeHandler;
-import net.minecraft.client.gui.Font;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import tesseract.TesseractGraphWrappers;
-import tesseract.api.heat.IHeatHandler;
 
+import static muramasa.antimatter.data.AntimatterMaterials.Water;
 import static muramasa.gregtech.data.Materials.*;
 
 public class BlockEntitySmallHeatExchanger extends BlockEntitySecondaryOutput<BlockEntitySmallHeatExchanger> {
@@ -51,8 +35,28 @@ public class BlockEntitySmallHeatExchanger extends BlockEntitySecondaryOutput<Bl
             protected boolean canRecipeContinue() {
                 return super.canRecipeContinue() && heatHandler.map(h -> h.getHeat() + (activeRecipe.getTotalPower()) <= h.getHeatCap()).orElse(false);
             }
-        });
 
+            @Override
+            public boolean consumeResourceForRecipe(boolean simulate) {
+                return tile.heatHandler.map(e -> e.insert((int) getPower() / 5, simulate) >= getPower() / 5).orElse(false);
+            }
+
+            @Override
+            protected void calculateDurations() {
+                maxProgress = activeRecipe.getDuration() * 5;
+            }
+
+            @Override
+            public boolean accepts(FluidHolder stack) {
+                return super.accepts(stack) || stack.getFluid() == Water.getLiquid() || stack.getFluid() == DistilledWater.getLiquid();
+            }
+        });
+        fluidHandler.set(() -> new MachineFluidHandler<>(this){
+            @Override
+            public boolean canFluidBeAutoOutput(FluidHolder fluid) {
+                return fluid.getFluid() != Steam.getGas();
+            }
+        });
     }
 
     @Override
@@ -61,17 +65,25 @@ public class BlockEntitySmallHeatExchanger extends BlockEntitySecondaryOutput<Bl
         if (level.getGameTime() % 20 == 0){
             fluidHandler.ifPresent(f -> {
                 heatHandler.ifPresent(h -> {
+                    if (h.getHeat() >= 2560){
+                        Utils.createExplosion(this.level, worldPosition, 6.0F, Explosion.BlockInteraction.DESTROY);
+                        return;
+                    }
                     if (h.getHeat() >= 80){
-                        int heatMultiplier = h.getHeat() / 80;
+                        int heatMultiplier = Math.min(6, h.getHeat() / 80);
                         int waterToExtract = 0;
-                        FluidTank waterTank = f.getInputTanks().getTank(f.getInputTanks().getFirstAvailableTank(DistilledWater.getLiquid(1), true));
-                        if (waterTank != null) {
-                            waterToExtract = (int) Math.min(heatMultiplier, waterTank.getTankAmount() / TesseractGraphWrappers.dropletMultiplier);
+                        int waterTankId = f.getInputTanks().getFirstAvailableTank(DistilledWater.getLiquid(1), true);
+                        if (waterTankId < 0){
+                            waterTankId = f.getInputTanks().getFirstAvailableTank(Water.getLiquid(1), true);
+                        }
+                        FluidTank waterTank;
+                        if (waterTankId < 0){
+                            waterTank = null;
                         } else {
-                            waterTank = f.getInputTanks().getTank(f.getInputTanks().getFirstAvailableTank(DistilledWater.getLiquid(1), true));
-                            if (waterTank != null) {
-                                waterToExtract = (int) Math.min(heatMultiplier, waterTank.getTankAmount() / TesseractGraphWrappers.dropletMultiplier);
-                            }
+                            waterTank = f.getInputTanks().getTank(waterTankId);
+                        }
+                        if (waterTank != null) {
+                            waterToExtract = (int) Math.min(heatMultiplier, waterTank.getStoredFluid().getFluidAmount() / TesseractGraphWrappers.dropletMultiplier);
                         }
                         if (waterToExtract > 0){
                             if (hadNoWater){
@@ -82,11 +94,12 @@ public class BlockEntitySmallHeatExchanger extends BlockEntitySecondaryOutput<Bl
                             int waterMultiplier = 160;
                             int steamToAdd = waterToExtract  * waterMultiplier;
                             long inserted = f.getOutputTanks().internalInsert(steam.getGas(steamToAdd), true);
-                            if (inserted >= TesseractGraphWrappers.dropletMultiplier){
-                                waterToExtract = Math.min(waterToExtract, (int) (inserted / TesseractGraphWrappers.dropletMultiplier));
+                            int successfulSteam = (int) ((inserted / TesseractGraphWrappers.dropletMultiplier) / 160);
+                            if (successfulSteam >= 1){
+                                waterToExtract = Math.min(waterToExtract, successfulSteam);
                                 waterTank.internalExtract(Utils.ca(waterToExtract, waterTank.getStoredFluid()), false);
-                                f.getOutputTanks().internalInsert(steam.getGas(steamToAdd), false);
-                                h.extract(waterToExtract * 80, false);
+                                f.getOutputTanks().internalInsert(steam.getGas(waterToExtract * waterMultiplier), false);
+                                h.extractInternal(waterToExtract * 80, false);
                             }
                             hadNoWater = false;
                         } else {

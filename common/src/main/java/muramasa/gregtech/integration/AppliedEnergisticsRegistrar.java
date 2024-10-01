@@ -1,11 +1,13 @@
 package muramasa.gregtech.integration;
 
+import io.github.gregtechintergalactical.gtcore.data.GTCoreItems;
 import muramasa.antimatter.AntimatterAPI;
 import muramasa.antimatter.Ref;
 import muramasa.antimatter.data.AntimatterStoneTypes;
 import muramasa.antimatter.data.ForgeCTags;
 import muramasa.antimatter.datagen.providers.AntimatterRecipeProvider;
 import muramasa.antimatter.event.MaterialEvent;
+import muramasa.antimatter.recipe.ingredient.FluidIngredient;
 import muramasa.antimatter.recipe.ingredient.RecipeIngredient;
 import muramasa.antimatter.registration.IAntimatterRegistrar;
 import muramasa.antimatter.registration.RegistrationEvent;
@@ -17,19 +19,25 @@ import muramasa.gregtech.data.RecipeMaps;
 import muramasa.gregtech.data.TierMaps;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 import java.util.function.Consumer;
 
+import static muramasa.antimatter.Ref.L;
 import static muramasa.antimatter.data.AntimatterMaterialTypes.*;
 import static muramasa.antimatter.data.AntimatterMaterials.*;
 import static muramasa.antimatter.recipe.ingredient.RecipeIngredient.of;
 import static muramasa.gregtech.data.Materials.*;
-import static muramasa.gregtech.data.RecipeMaps.E_BLAST_FURNACE;
-import static muramasa.gregtech.data.RecipeMaps.LASER_ENGRAVER;
+import static muramasa.gregtech.data.RecipeMaps.*;
+import static muramasa.gregtech.data.RecipeMaps.BATH;
 
 public class AppliedEnergisticsRegistrar implements IAntimatterRegistrar {
 
@@ -92,18 +100,26 @@ public class AppliedEnergisticsRegistrar implements IAntimatterRegistrar {
         RecipeMaps.ASSEMBLER.RB().ii(of(getAe2Item("printed_calculation_processor")), of(getAe2Item("printed_silicon"))).fi(Redstone.getLiquid(AntimatterPlatformUtils.isForge() ? 144L : 9000L)).io(new ItemStack(getAe2Item("calculation_processor"))).add("calculation_processor", 64, 32);
         RecipeMaps.ASSEMBLER.RB().ii(DUST.getMaterialIngredient(CertusQuartz, 1), of(ItemTags.SAND)).io(new ItemStack(getAe2Item("certus_crystal_seed"), 2)).add("certus_crystal_seed", 64, 8);
         RecipeMaps.ASSEMBLER.RB().ii(DUST.getMaterialIngredient(Fluix, 1), of(ItemTags.SAND)).io(new ItemStack(getAe2Item("fluix_crystal_seed"), 2)).add("fluix_crystal_seed", 64, 8);
-        RecipeMaps.MACERATOR.RB().ii(of(getAe2Item("sky_stone_chest"))).io(new ItemStack(getAe2Item("sky_dust"), 8)).add("sky_dust_from_chest", 400, 2);
-        RecipeMaps.MACERATOR.RB().ii(of(getAe2Item("sky_stone_block"))).io(new ItemStack(getAe2Item("sky_dust"))).add("sky_dust", 400, 2);
+        PULVERIZER.RB().ii(of(getAe2Item("sky_stone_chest"))).io(new ItemStack(getAe2Item("sky_dust"), 8)).add("sky_dust_from_chest", 400, 2);
+        PULVERIZER.RB().ii(of(getAe2Item("sky_stone_block"))).io(new ItemStack(getAe2Item("sky_dust"))).add("sky_dust", 400, 2);
         RecipeMaps.ELECTROLYZER.RB().ii(GEM.getMaterialIngredient(CertusQuartz, 1)).io(new ItemStack(getAe2Item("charged_certus_quartz_crystal"))).add("charged_certus_quartz", 2000, 30);
-        E_BLAST_FURNACE.RB().ii(RecipeIngredient.of(TagUtils.getForgelikeItemTag("silicon")), TierMaps.INT_CIRCUITS.get(1)).io(INGOT.get(Silicon)).add("silicon_ingot_from_silicon", 1683, 120, 1683);
+        E_BLAST_FURNACE.RB().ii(RecipeIngredient.of(TagUtils.getForgelikeItemTag("silicon")), GTCoreItems.SELECTOR_TAG_INGREDIENTS.get(1)).io(INGOT.get(Silicon)).add("silicon_ingot_from_silicon", 1683, 120, 1683);
         LASER_ENGRAVER.RB().ii(BLOCK.getMaterialIngredient(Iron, 1), LENS.getMaterialIngredient(GreenSapphire, 1).setNoConsume()).io(new ItemStack(getAe2Item("logic_processor_press"))).add("inscriber_logic_press", 2000, 1920);
         LASER_ENGRAVER.RB().ii(BLOCK.getMaterialIngredient(Iron, 1), LENS.getMaterialIngredient(Opal, 1).setNoConsume()).io(new ItemStack(getAe2Item("calculation_processor_press"))).add("inscriber_calculation_press", 2000, 1920);
         LASER_ENGRAVER.RB().ii(BLOCK.getMaterialIngredient(Iron, 1), LENS.getMaterialIngredient(BlueTopaz, 1).setNoConsume()).io(new ItemStack(getAe2Item("calculation_processor_press"))).add("inscriber_calculation_press_2", 2000, 1920);
         LASER_ENGRAVER.RB().ii(BLOCK.getMaterialIngredient(Iron, 1), LENS.getMaterialIngredient(Sapphire, 1).setNoConsume()).io(new ItemStack(getAe2Item("calculation_processor_press"))).add("inscriber_calculation_press_3", 2000, 1920);
         LASER_ENGRAVER.RB().ii(BLOCK.getMaterialIngredient(Iron, 1), LENS.getMaterialIngredient(YellowGarnet, 1).setNoConsume()).io(new ItemStack(getAe2Item("engineering_processor_press"))).add("inscriber_engineering_press", 2000, 1920);
-        LASER_ENGRAVER.RB().ii(BLOCK.getMaterialIngredient(Iron, 1), LENS.getMaterialIngredient(Dilithium, 1).setNoConsume()).io(new ItemStack(getAe2Item("silicon_press"))).add("inscriber_silicon_press", 2000, 1920);
-        LASER_ENGRAVER.RB().ii(BLOCK.getMaterialIngredient(Iron, 1), LENS.getMaterialIngredient(Diamond, 1).setNoConsume()).io(new ItemStack(getAe2Item("silicon_press"))).add("inscriber_silicon_press_2", 2000, 1920);
-        LASER_ENGRAVER.RB().ii(BLOCK.getMaterialIngredient(Iron, 1), LENS.getMaterialIngredient(Glass, 1).setNoConsume()).io(new ItemStack(getAe2Item("silicon_press"))).add("inscriber_silicon_press_3", 2000, 1920);
+        LASER_ENGRAVER.RB().ii(BLOCK.getMaterialIngredient(Iron, 1), LENS.getMaterialIngredient(Diamond, 1).setNoConsume()).io(new ItemStack(getAe2Item("silicon_press"))).add("inscriber_silicon_press", 2000, 1920);
+        LASER_ENGRAVER.RB().ii(BLOCK.getMaterialIngredient(Iron, 1), LENS.getMaterialIngredient(Glass, 1).setNoConsume()).io(new ItemStack(getAe2Item("silicon_press"))).add("inscriber_silicon_press_2", 2000, 1920);
+        for (DyeColor dye : DyeColor.values()){
+            String dyeName = dye.getName() + "_dye";
+            TagKey<Fluid> dyeLiquid = TagUtils.getFluidTag(new ResourceLocation(GTIRef.ID, dyeName));
+            BATH.RB().fi(FluidIngredient.of(dyeLiquid, L / 8)).ii(getAe2Item("fluix_smart_cable")).io(getAe2Item(dye.getName() + "_smart_cable")).add(dye.getName() + "_smart_cable", 64);
+            BATH.RB().fi(FluidIngredient.of(dyeLiquid, L / 8)).ii(getAe2Item("fluix_covered_cable")).io(getAe2Item(dye.getName() + "_covered_cable")).add(dye.getName() + "_covered_cable", 64);
+            BATH.RB().fi(FluidIngredient.of(dyeLiquid, L / 8)).ii(getAe2Item("fluix_glass_cable")).io(getAe2Item(dye.getName() + "_glass_cable")).add(dye.getName() + "_glass_cable", 64);
+            BATH.RB().fi(FluidIngredient.of(dyeLiquid, L / 8)).ii(getAe2Item("fluix_smart_dense_cable")).io(getAe2Item(dye.getName() + "_smart_dense_cable")).add(dye.getName() + "_smart_dense_cable", 64);
+            BATH.RB().fi(FluidIngredient.of(dyeLiquid, L / 8)).ii(getAe2Item("fluix_covered_dense_cable")).io(getAe2Item(dye.getName() + "_covered_dense_cable")).add(dye.getName() + "_covered_dense_cable", 64);
+        }
     }
     
     public static void craftingRecipes(Consumer<FinishedRecipe> output, AntimatterRecipeProvider provider){

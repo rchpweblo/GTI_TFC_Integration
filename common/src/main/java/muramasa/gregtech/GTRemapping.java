@@ -23,13 +23,18 @@ public class GTRemapping {
             }
             return r;
         });
+        for (int i = 0; i < 25; i++) {
+            remapGTCore("int_circuit_" + i, "selector_tag_"+i);
+        }
         AntimatterRemapping.remapBlockEntity(new ResourceLocation(Ref.SHARED_ID, "fluid_pipe_polyethylene"), new ResourceLocation(Ref.SHARED_ID, "fluid_pipe_plastic"));
+        remap("bath_hv", "bath");
         remap("coke_oven_bronze", "coke_oven");
         remap("primitive_blast_furnace_bronze", "primitive_blast_furnace");
         remap("heat_exchanger_ev", "large_heat_exchanger");
         AntimatterRemapping.remapBlockEntity(new ResourceLocation(GTIRef.ID, "heat_exchanger"), new ResourceLocation(GTIRef.ID, "large_heat_exchanger"));
         AntimatterRemapping.remapMachine("coal_boiler", SOLID_FUEL_BOILER);
         AntimatterRemapping.remapMachine("pulverizer", MACERATOR);
+        AntimatterRemapping.remapMachine("large_macerator", LARGE_PULVERIZER);
         AntimatterRemapping.remapMachine("fluid_extractor", FLUID_PRESS);
         AntimatterRemapping.remapMachine("hatch_item_input", HATCH_ITEM_I);
         AntimatterRemapping.remapMachine("hatch_item_output", HATCH_ITEM_O);
@@ -160,6 +165,7 @@ public class GTRemapping {
         remap("casing_turbine_2", "stainless_steel_turbine_casing");
         remap("casing_turbine_3", "titanium_turbine_casing");
         remap("casing_turbine_4", "tungstensteel_turbine_casing");
+        AntimatterRemapping.remap(new ResourceLocation(GTIRef.ID, "monocrystalline_silicon_boule"), new ResourceLocation(Ref.SHARED_ID, "boule_silicon"));
     }
 
     private static void remap(String oldId, String newId){

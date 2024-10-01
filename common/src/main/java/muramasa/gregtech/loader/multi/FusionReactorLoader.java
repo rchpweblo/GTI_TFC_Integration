@@ -1,17 +1,17 @@
 package muramasa.gregtech.loader.multi;
 
+import static io.github.gregtechintergalactical.gtcore.data.GTCoreItems.SELECTOR_TAG_INGREDIENTS;
 import static muramasa.antimatter.Ref.L;
 import static muramasa.antimatter.data.AntimatterMaterials.Gold;
 import static muramasa.antimatter.data.AntimatterMaterials.Iron;
 import static muramasa.gregtech.data.Materials.*;
 import static muramasa.gregtech.data.RecipeMaps.FUSION;
-import static muramasa.gregtech.data.TierMaps.INT_CIRCUITS;
 
 public class FusionReactorLoader {
     public static void init(){
-        FUSION.RB().fi(Deuterium.getGas(2000)).ii(INT_CIRCUITS.get(1)).fo(Helium3.getGas(500), Tritium.getGas(500)).add("helium3", 730, -8192, 191365120);
-        FUSION.RB().fi(Helium3.getGas(2000)).ii(INT_CIRCUITS.get(1)).fo(Helium.getGas(1000)).add("helium", 1280, -8192, 338165760);
-        FUSION.RB().fi(Tritium.getGas(2000)).ii(INT_CIRCUITS.get(1)).fo(Helium.getGas(1000)).add("helium_2", 1130, -8192, 269222720);
+        FUSION.RB().fi(Deuterium.getGas(2000)).ii(SELECTOR_TAG_INGREDIENTS.get(1)).fo(Helium3.getGas(500), Tritium.getGas(500)).add("helium3", 730, -8192, 191365120);
+        FUSION.RB().fi(Helium3.getGas(2000)).ii(SELECTOR_TAG_INGREDIENTS.get(1)).fo(Helium.getGas(1000)).add("helium", 1280, -8192, 338165760);
+        FUSION.RB().fi(Tritium.getGas(2000)).ii(SELECTOR_TAG_INGREDIENTS.get(1)).fo(Helium.getGas(1000)).add("helium_2", 1130, -8192, 269222720);
         FUSION.RB().fi(Helium3.getGas(1000), Deuterium.getGas(1000)).fo(Helium.getGas(1000)).add("helium_3", 1820, -2048, 60000000); //plasma
         FUSION.RB().fi(Tritium.getGas(1000), Deuterium.getGas(1000)).fo(Helium.getGas(1000)).add("helium_4", 1760, -8192, 40000000); //plasma
         FUSION.RB().fi(Helium.getGas(1000), Carbon.getLiquid(L)).fo(Oxygen.getGas(1000)).add("oxygen", 716, -8192, 80000000); //plasma
@@ -34,7 +34,7 @@ public class FusionReactorLoader {
         FUSION.RB().fi(Magnesium.getLiquid(L / 9), Mercury.getLiquid(L / 9)).fo(Uranium.getLiquid(L / 9)).add("molten_uranium", 64, 49152, 240000000);
         FUSION.RB().fi(Aluminium.getLiquid(L / 9), Gold.getLiquid(L / 9)).fo(Uranium.getLiquid(L / 9)).add("molten_uranium_2", 64, 49152, 240000000);
         FUSION.RB().fi(Radon.getGas(125), EnrichedNaquadah.getLiquid(L / 9)).fo(Naquadria.getLiquid(3)).add("molten_naquadria", 64, 49152, 400000000);
-        FUSION.RB().fi(Chromium.getLiquid(L / 9), Lutetium.getLiquid(L / 9)).fo(Americium.getLiquid(L / 9)).add("molten_americium", 96, 49152, 200000000);
+        //FUSION.RB().fi(Chromium.getLiquid(L / 9), Lutetium.getLiquid(L / 9)).fo(Americium.getLiquid(L / 9)).add("molten_americium", 96, 49152, 200000000);
         FUSION.RB().fi(Helium.getGas(125), Uranium.getLiquid(L / 9)).fo(Plutonium239.getLiquid(L / 9)).add("molten_plutonium239", 128, 49152, 480000000);
         FUSION.RB().fi(Naquadria.getLiquid(L / 9), Americium.getLiquid(L / 9)).fo(Neutronium.getLiquid(1)).add("molten_neutronium", 1200, 98304, 600000000);
     }

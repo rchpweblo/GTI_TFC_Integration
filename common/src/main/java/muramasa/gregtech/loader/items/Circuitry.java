@@ -38,6 +38,7 @@ import static muramasa.antimatter.data.AntimatterMaterials.*;
 import static muramasa.antimatter.machine.Tier.LV;
 import static muramasa.antimatter.machine.Tier.MV;
 import static muramasa.gregtech.data.GregTechMaterialTags.SOLDER;
+import static muramasa.gregtech.data.GregTechMaterialTypes.BOULE;
 import static muramasa.gregtech.data.Materials.*;
 import static muramasa.antimatter.recipe.ingredient.RecipeIngredient.of;
 import static muramasa.gregtech.data.RecipeMaps.*;
@@ -172,8 +173,8 @@ public class Circuitry {
     }
 
     private static void silicon(){
-        E_BLAST_FURNACE.RB().temperature(1784).ii(DUST.getMaterialIngredient(Silicon, 16), INT_CIRCUITS.get(16)).fi(Helium.getGas(1000)).io(GregTechItems.SiliconBoule).add("silicon_boule", 9000, 120);
-        addCuttingRecipe(GregTechItems.SiliconBoule, GregTechItems.Wafer, 16, 1600, 384, 1);
+        //E_BLAST_FURNACE.RB().temperature(1784).ii(DUST.getMaterialIngredient(Silicon, 16), INT_CIRCUITS.get(16)).fi(Helium.getGas(1000)).io(GregTechItems.SiliconBoule).add("silicon_boule", 9000, 120);
+        addCuttingRecipe(BOULE.get(Silicon), GregTechItems.Wafer, 16, 1600, 384, 1);
         addCuttingRecipe(GregTechItems.Wafer, GregTechItems.SiliconChip, 8, 600, 48, 22);
         if (GregTechConfig.HARDER_CIRCUITS){
             E_BLAST_FURNACE.RB().temperature(2484).ii(DUST.getMaterialIngredient(Silicon, 16), DUST.getMaterialIngredient(Glowstone, 1)).fi(Nitrogen.getGas(1000)).io(GregTechItems.GlowstoneDopedSiliconBoule).add("glowstone_doped_silicon_boule", 12000, 480);
@@ -182,9 +183,9 @@ public class Circuitry {
             addCuttingRecipe(GregTechItems.NaquadahDopedSiliconBoule, GregTechItems.NaquadahDopedWafer, 64, 1600, 64, 240);
             addLensRecipe(GregTechItems.NaquadahDopedWafer, GregTechItems.ASoCWafer, 1, 200, 1920, Amber, Topaz);
             addCuttingRecipe(GregTechItems.ASoCWafer, GregTechItems.ASoC, 8, 600, 48, 22);
-            addLensRecipe(GregTechItems.Wafer, GregTechItems.CentralProcessingUnitWafer, 1, 900, 120, Diamond, Glass, Dilithium);
-            addLensRecipe(GregTechItems.GlowstoneDopedWafer, GregTechItems.CentralProcessingUnitWafer, 4, 500, 480, Diamond, Glass, Dilithium);
-            addLensRecipe(GregTechItems.NaquadahDopedWafer, GregTechItems.CentralProcessingUnitWafer, 8, 200, 1920, Diamond, Glass, Dilithium);
+            addLensRecipe(GregTechItems.Wafer, GregTechItems.CentralProcessingUnitWafer, 1, 900, 120, Diamond, Glass);
+            addLensRecipe(GregTechItems.GlowstoneDopedWafer, GregTechItems.CentralProcessingUnitWafer, 4, 500, 480, Diamond, Glass);
+            addLensRecipe(GregTechItems.NaquadahDopedWafer, GregTechItems.CentralProcessingUnitWafer, 8, 200, 1920, Diamond, Glass);
             addCuttingRecipe(GregTechItems.CentralProcessingUnitWafer, GregTechItems.CentralProcessingUnit, 8, 600, 48, 22);
             CHEMICAL_REACTOR.RB().ii(of(GregTechItems.PICWafer), DUST.getMaterialIngredient(IndiumGalliumPhosphide, 2)).fi(RedAlloy.getLiquid(L * 2)).io(GregTechItems.HPICWafer).add("hpic_wafer", 1200, 1920);
             addCuttingRecipe(GregTechItems.HPICWafer, GregTechItems.HighPowerIC, 2, 600, 48, 22);
@@ -239,6 +240,7 @@ public class Circuitry {
     private static void circuitParts(){
         ASSEMBLER.RB().ii(PLATE.getMaterialIngredient(Lazurite, 1), DUST.getMaterialIngredient(AntimatterMaterials.Glowstone, 1)).io(new ItemStack(AdvCircuitParts, 2)).add("advanced_circuit_parts", 32, 64);
         ASSEMBLER.RB().ii(PLATE.getMaterialIngredient(Lapis, 1), DUST.getMaterialIngredient(AntimatterMaterials.Glowstone, 1)).io(new ItemStack(AdvCircuitParts, 2)).add("advanced_circuit_parts_1", 32, 64);
+        ASSEMBLER.RB().ii(PLATE.getMaterialIngredient(Niobium, 1), WIRE_FINE.getMaterialIngredient(Platinum, 1)).io(new ItemStack(ComplexCircuitParts, 2)).add("complex_circuit_parts", 32, 256);
         ASSEMBLER.RB().ii(PLATE.getMaterialIngredient(Plastic, 1), of(GTCoreCables.WIRE_RED_ALLOY.getBlockItem(PipeSize.VTINY), 1)).fi(Tin.getLiquid(L / 4)).io(new ItemStack(NandChip)).add("nand_chip_tin_poly", 32, 16);
         ASSEMBLER.RB().ii(PLATE.getMaterialIngredient(Plastic, 1), of(GTCoreCables.WIRE_RED_ALLOY.getBlockItem(PipeSize.VTINY), 1)).fi(SolderingAlloy.getLiquid(L / 8)).io(new ItemStack(NandChip)).add("nand_chip_soldering_alloy_poly", 32, 16);
         ASSEMBLER.RB().ii(PLATE.getMaterialIngredient(Plastic, 1), of(GTCoreCables.WIRE_RED_ALLOY.getBlockItem(PipeSize.VTINY), 1)).fi(Lead.getLiquid(L / 2)).io(new ItemStack(NandChip)).add("nand_chip_lead_poly", 32, 16);
@@ -251,6 +253,7 @@ public class Circuitry {
         ASSEMBLER.RB().ii(DUST.getMaterialIngredient(Silicon, 1), PLATE.getMaterialIngredient(Plastic, 1)).io(new ItemStack(CircuitBoardEmpty)).add("empty_circuit_board", 32, 16);
         FORMING_PRESS.RB().ii(of(CircuitBoardEmpty), of(EtchedWiringMV, 4)).io(new ItemStack(CircuitBoardBasic)).add("basic_circuit_board", 32, 16);
         FORMING_PRESS.RB().ii(of(CircuitBoardEmpty), of(EtchedWiringHV, 4)).io(new ItemStack(CircuitBoardAdvanced)).add("advanced_circuit_board", 32, 16);
+        FORMING_PRESS.RB().ii(of(CircuitBoardEmpty), of(EtchedWiringEV, 4)).io(new ItemStack(CircuitBoardComplex)).add("complex_circuit_board", 32, 64);
         FORMING_PRESS.RB().ii(of(CircuitBoardProcessorEmpty), of(EtchedWiringEV, 4)).io(new ItemStack(CircuitBoardProcessor)).add("processor_circuit_board", 32, 256);
         ASSEMBLER.RB().ii(of(GregTechItems.Wafer, 2), PLATE.getMaterialIngredient(Polytetrafluoroethylene, 1)).io(new ItemStack(CircuitBoardProcessorEmpty)).add("empty_processor_circuit_board", 32, 256);
     }
@@ -264,7 +267,10 @@ public class Circuitry {
         ASSEMBLER.RB().ii(of(CIRCUITS_BASIC), of(NandChip, 2)).fi(Lead.getLiquid(L)).io(new ItemStack(CircuitGood)).add("good_circuit_lead", 32, 16);
         ASSEMBLER.RB().ii(of(CircuitBoardAdvanced), of(AdvCircuitParts, 2)).fi(Tin.getLiquid(L)).io(new ItemStack(CircuitAdv)).add("advanced_circuit_tin", 32, 64);
         ASSEMBLER.RB().ii(of(CircuitBoardAdvanced), of(AdvCircuitParts, 2)).fi(SolderingAlloy.getLiquid(L / 2)).io(new ItemStack(CircuitAdv)).add("advanced_circuit_soldering_alloy", 32, 64);
-        ASSEMBLER.RB().ii(of(CircuitBoardAdvanced), of(AdvCircuitParts, 2)).fi(Lead.getLiquid(L * 2)).io(new ItemStack(CircuitAdv)).add("adv_storage_circuit_lead", 32, 64);
+        ASSEMBLER.RB().ii(of(CircuitBoardAdvanced), of(AdvCircuitParts, 2)).fi(Lead.getLiquid(L * 2)).io(new ItemStack(CircuitAdv)).add("advanced_circuit_lead", 32, 64);
+        ASSEMBLER.RB().ii(of(CircuitBoardComplex), of(ComplexCircuitParts, 2)).fi(Tin.getLiquid(L)).io(new ItemStack(CircuitComplex)).add("complex_circuit_tin", 32, 64);
+        ASSEMBLER.RB().ii(of(CircuitBoardComplex), of(ComplexCircuitParts, 2)).fi(SolderingAlloy.getLiquid(L / 2)).io(new ItemStack(CircuitComplex)).add("complex_circuit_soldering_alloy", 32, 64);
+        ASSEMBLER.RB().ii(of(CircuitBoardComplex), of(ComplexCircuitParts, 2)).fi(Lead.getLiquid(L * 2)).io(new ItemStack(CircuitComplex)).add("complex_circuit_lead", 32, 64);
         ASSEMBLER.RB().ii(of(CircuitBoardEpoxy), of(EngravedCrystalChip)).fi(Tin.getLiquid(L)).io(new ItemStack(CircuitDataStorage)).add("data_storage_circuit_tin", 32, 64);
         ASSEMBLER.RB().ii(of(CircuitBoardEpoxy), of(EngravedCrystalChip)).fi(SolderingAlloy.getLiquid(L / 2)).io(new ItemStack(CircuitDataStorage)).add("data_storage__circuit_soldering_alloy", 32, 64);
         ASSEMBLER.RB().ii(of(CircuitBoardEpoxy), of(EngravedCrystalChip)).fi(Lead.getLiquid(L * 2)).io(new ItemStack(CircuitDataStorage)).add("data_storage_circuit_lead", 32, 64);
